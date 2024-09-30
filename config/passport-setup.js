@@ -38,23 +38,38 @@ passport.use(new LinkedInStrategy({
 ));
 
 
-passport.use('azuread', new CustomStrategy(
-    (req, done) => {
-        const redirectUri = 'http://localhost:3000/auth/azuread/callback';
-        const authCodeUrlParameters = {
-            scopes: ["user.read"],
-            redirectUri: redirectUri,
-        };
-        pca.getAuthCodeUrl(authCodeUrlParameters)
-            .then((authUrl) => {
-                req.res.redirect(authUrl);
-                done(null, req.user);
-            })
-            .catch((error) => {
-                done(error);
-            });
-    }
-));
+// passport.use('azuread', new CustomStrategy(
+//     (req, done) => {
+//         const redirectUri = 'http://localhost:3000/auth/azuread/callback';
+//         const authCodeUrlParameters = {
+//             scopes: ["user.read"],
+//             redirectUri: redirectUri,
+//         };
+//         pca.getAuthCodeUrl(authCodeUrlParameters)
+//             .then((authUrl) => {
+//                 req.res.redirect(authUrl);
+//                 done(null, req.user);
+//             })
+//             .catch((error) => {
+//                 done(error);
+//             });
+//     }
+// ));
+passport.use('azuread', new CustomStrategy((req, done) => {
+    const redirectUri = 'http://localhost:3000/auth/azuread/callback';
+    const authCodeUrlParameters = {
+        scopes: ["user.read"],
+        redirectUri: redirectUri,
+    };
+
+    pca.getAuthCodeUrl(authCodeUrlParameters)
+        .then(authUrl => {
+            done(null, { url: authUrl });
+        })
+        .catch(error => {
+            done(error);
+        });
+}));
 
 
 
@@ -66,4 +81,5 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-module.exports = passport;
+// module.exports = passport;
+module.exports = pca;
