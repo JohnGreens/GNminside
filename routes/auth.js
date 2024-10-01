@@ -4,9 +4,8 @@ const router = express.Router();
 const passport = require('passport');
 const pca = require('../config/passport-setup');
 
-
-
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
     const user = {
         id: req.user.id,  
@@ -19,12 +18,15 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
         TypeOfRequest: "GetMinsideIDs"  
     })
     .then(apiResponse => {
-        // console.log(apiResponse)
         if (apiResponse.data && apiResponse.data.eaas) {
-            console.log(apiResponse.data.eaas[1])
             // If user is found, log them in and proceed
             user.eaasID=apiResponse.data.eaas
             user.klimaID=apiResponse.data.klima
+            user.combinedData = {
+                projects: apiResponse.data.eaas.map(p => ({ projectId: p.ProjectID, projectName: p.Projectname })),
+                ouids: apiResponse.data.klima.map(o => ({ orgUnitId: o.OrgUnitID, orgLevel2: o.OrgLevel2 }))
+            };
+            
             req.login(user, function(err) {
                 if (err) { return next(err); }
                 return res.redirect('/');  // Redirect to home or dashboard
@@ -47,16 +49,13 @@ router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedi
         id: req.user.id,  
         provider: 'linkedin'
     };
-
     // Post to your API
     axios.post('https://prod-08.northcentralus.logic.azure.com:443/workflows/a866db458a254ce38fb746a844b1fb91/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vOVP3IY0qM4C0o5lHIC_7_pkoE7X78gF5EJ5uLwaW98', {
         TennentID: "fb174ad5-c5b5-452d-8240-34675b784ba5",
         TypeOfRequest: "GetMinsideIDs"  
     })
     .then(apiResponse => {
-        // console.log(apiResponse)
         if (apiResponse.data && apiResponse.data.eaas) {
-            console.log(apiResponse.data.eaas[1])
             // If user is found, log them in and proceed
             user.eaasID=apiResponse.data.eaas
             user.klimaID=apiResponse.data.klima
@@ -106,16 +105,13 @@ router.get('/azuread/callback', (req, res, next) => {
         const user = {
             id: response.account.localAccountId,
             provider: 'Microsoft',
-        };
-       
+        }
         axios.post('https://prod-08.northcentralus.logic.azure.com:443/workflows/a866db458a254ce38fb746a844b1fb91/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vOVP3IY0qM4C0o5lHIC_7_pkoE7X78gF5EJ5uLwaW98', {
             TennentID: user.id,
             TypeOfRequest: "GetMinsideIDs"  
         })
         .then(apiResponse => {
-            // console.log(apiResponse)
             if (apiResponse.data && apiResponse.data.eaas) {
-                console.log(apiResponse.data.eaas[1])
                 // If user is found, log them in and proceed
                 user.eaasID=apiResponse.data.eaas
                 user.klimaID=apiResponse.data.klima

@@ -1,33 +1,59 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+require('dotenv').config();
+
+const {fetchPowerBIEmbedInfo,reportsList} = require('../config/powerbiEmbed-setup');
+
+
 
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
-        // console.log(res.user)
-        res.send(`
-            <h1>Welcome</h1>
-            <p>User ID: ${req.user.id}</p>
-            <p>Signed in using: ${req.user.provider}</p>
-            <p>Eaas Filter: ${req.user.eaasID}</p>
-            <p>Klima Filter: ${req.user.klimaID}</p>
-            <form action="/logout" method="post">
-                <button type="submit">Sign Out</button>
-            </form>
-        `);
+        res.render('dashboard', { 
+            title: 'GreenSide',
+            id: req.user.id,
+            provider:req.user.provider,
+            eaasID:req.user.eaasID,
+            klimaID:req.user.klimaID,
+            combinedData:req.user.combinedData
+        });
     } else {
         res.redirect('/login');
     }
 });
 
-router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/login.html'));
+// Endpoint to serve the REPORT_1_ID to the client
+router.get('/config', (req, res) => {
+    res.json({ report1Id: process.env.REPORT_1_ID });
+});
+// API endpoint to get the list of reports for menu
+router.get('/reports', (req, res) => {
+    res.json(reportsList);
+});
+// API endpoint to retrieve embedding information for a specific report
+router.get('/embed-info/:reportId', async (req, res) => {
+    try {
+        const reportId = req.params.reportId;
+        const embedInfo = await fetchPowerBIEmbedInfo(reportId);
+        res.json(embedInfo);
+    } catch (error) {
+        console.error('Error retrieving embed info:', error);
+        res.status(500).send('Error retrieving embed info');
+    }
 });
 
+
+//register route Not done yet
 router.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/register.html'));
 });
 
+//login route
+router.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/login.html'));
+});
+
+//logout route
 router.post('/logout', (req, res) => {
     req.logout((err) => {
         if (err) { return next(err); }
@@ -39,5 +65,6 @@ router.post('/logout', (req, res) => {
         });
     });
 });
+
 
 module.exports = router;

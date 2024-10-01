@@ -15,11 +15,13 @@
     "csurf": "^1.11.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "express-handlebars": "^8.0.1",
     "express-session": "^1.18.0",
     "hbs": "^4.2.0",
     "passport": "^0.7.0",
     "passport-custom": "^1.1.1",
     "passport-google-oauth20": "^2.0.0",
-    "passport-linkedin-oauth2": "github:auth0/passport-linkedin-oauth2#v3.0.0"
+    "passport-linkedin-oauth2": "github:auth0/passport-linkedin-oauth2#v3.0.0",
+    "powerbi-client": "^2.23.1"
   }
 }
