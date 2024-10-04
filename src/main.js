@@ -1,3 +1,5 @@
+const {getProjectAccessDetails} = require('./accessIDhandler');
+const {embedReport,updateReportFilters,reportInstance} = require('./powerbiEmbed');
 // Function to apply the selected project filters
 function applyProjectFilter() {
     const selectedProjectIds = $('#projectFilterSelect').val();
@@ -17,8 +19,8 @@ function applyProjectFilter() {
 
     if (reportInstance) {
         reportInstance.getActivePage().then(page => {
-            currentReportPageName = page.name;  // Capture the current page name
-            console.log('Current Page before applying filters:', currentReportPageName);  // Log current page
+            // currentReportPageName = page.name;  // Capture the current page name
+            // console.log('Current Page before applying filters:', currentReportPageName);  // Log current page
 
             // Update filters without re-rendering the report
             updateReportFilters(selectedProjectIds, selectedOUIDs);
@@ -119,9 +121,13 @@ function toggleSidebar() {
 }
 
 // Make functions available globally
-window.toggleSidebar = toggleSidebar;
-window.applyProjectFilter = applyProjectFilter;
-// window.navigateReportPage = navigateReportPage;
-window.saveLastReportId = saveLastReportId;
+// window.toggleSidebar = toggleSidebar;
+// window.applyProjectFilter = applyProjectFilter;
+// // window.navigateReportPage = navigateReportPage;
+// window.saveLastReportId = saveLastReportId;
 
-
+module.exports = {
+    toggleSidebar:toggleSidebar,
+    applyProjectFilter:applyProjectFilter,
+    saveLastReportId:saveLastReportId
+}
