@@ -45,11 +45,41 @@
                     <!-- Project options will be dynamically added here -->
                 </select>
             </div>
+            
+            <div class="filter-container">
+                <!-- Year Dropdown -->
+                <div class="filter-year">
+                    <label for="yearSelect">År</label>
+                    <select id="yearSelect" class="filter-select" multiple="multiple">
+                        <!-- Dynamic year options will be added here -->
+                    </select>
+                </div>
+
+                <!-- Month Dropdown -->
+                <div class="filter-month">
+                    <label for="monthSelect">Måned</label>
+                    <select id="monthSelect" class="filter-select" multiple="multiple">
+                        <option value="januar">januar</option>
+                        <option value="februar">februar</option>
+                        <option value="mars">mars</option>
+                        <option value="april">april</option>
+                        <option value="mai">mai</option>
+                        <option value="juni">juni</option>
+                        <option value="juli">juli</option>
+                        <option value="august">august</option>
+                        <option value="september">september</option>
+                        <option value="oktober">oktober</option>
+                        <option value="november">november</option>
+                        <option value="desember">desember</option>
+                    </select>
+                </div>
+            </div>
             <div class="sidebar__contact">
                 <a class="sidebar__contact-link" href="https://www.greennorway.no/contact-1" target="_blank">
                     <i class="fas fa-envelope"></i>Kontakt oss
                 </a>
             </div>
+
         </aside>
         <main class="main-content">
             {{{body}}}
@@ -59,6 +89,99 @@
     <script src="/js/main.js"></script>
     <script src="/js/powerbiEmbed.js"></script>
     <script src="/js/filterHandler.js"></script> 
+    <script>
+    $(document).ready(function() {
+        // Get the current year and last month in UTC
+        const currentYear = new Date().getUTCFullYear();
+        const currentMonth = new Date().getUTCMonth(); // 0 is January, 11 is December
+        const startYear = 2020;
+
+        // Months array
+        const months = [
+            "januar", "februar", "mars", "april", "mai", "juni", 
+            "juli", "august", "september", "oktober", "november", "desember"
+        ];
+
+        // Populate the year dropdown dynamically (from current year down to 2020)
+        const yearSelect = $('#yearSelect');
+        yearSelect.empty();  // Clear any existing options to avoid duplicates
+        for (let year = currentYear; year >= startYear; year--) {  // Loop from current year down to 2020
+            const option = new Option(year, year);
+            yearSelect.append(option);
+        }
+
+        // Populate the month dropdown
+        const monthSelect = $('#monthSelect');
+        monthSelect.empty();  // Clear any existing options to avoid duplicates
+        months.forEach((month) => {
+            const option = new Option(month, month);
+            monthSelect.append(option);
+        });
+
+        // Function to update placeholders based on selection
+        function updatePlaceholder(selectElement, type) {
+            const selectedValues = selectElement.val();
+            if (!selectedValues || selectedValues.length === 0) {
+                if (type === 'month') {
+                    selectElement.next('.select2').find('.select2-selection__placeholder').text('Velg måned (Alle måneder valgt)');
+                } else if (type === 'year') {
+                    selectElement.next('.select2').find('.select2-selection__placeholder').text('Velg år (Alle år valgt)');
+                }
+            }
+        }
+
+        // Set the default selected year to the current year
+        yearSelect.val(currentYear.toString()).trigger('change');
+
+        // Set the default selected month to the previous month
+        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;  // Adjust for last month
+        monthSelect.val(months[lastMonth]).trigger('change');
+
+        // Initialize Select2 on the year and month selects
+        $('#yearSelect').select2({
+            placeholder: 'Velg år (Alle år valgt)',
+            allowClear: true,
+            dropdownAutoWidth: true,
+            width: '100%'
+        });
+
+        $('#monthSelect').select2({
+            placeholder: 'Velg måned (Alle måneder valgt)',
+            allowClear: true,
+            dropdownAutoWidth: true,
+            width: '100%'
+        });
+
+        // Ensure all months/years are logged if none selected when the user interacts with the dropdown
+        $('#monthSelect').on('change', function() {
+            const selectedMonths = $(this).val();
+            if (!selectedMonths || selectedMonths.length === 0) {
+                console.log('No months selected, applying all months:', months);
+                updatePlaceholder($(this), 'month');
+            } else {
+                console.log('Selected months:', selectedMonths);
+            }
+        });
+
+        $('#yearSelect').on('change', function() {
+            const selectedYears = $(this).val();
+            if (!selectedYears || selectedYears.length === 0) {
+                const allYears = [];
+                for (let year = currentYear; year >= startYear; year--) {
+                    allYears.push(year.toString());
+                }
+                console.log('No years selected, applying all years:', allYears);
+                updatePlaceholder($(this), 'year');
+            } else {
+                console.log('Selected years:', selectedYears);
+            }
+        });
+    });
+</script>
+
+
+
+
     
     
 </body>
