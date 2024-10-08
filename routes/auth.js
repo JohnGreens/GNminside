@@ -3,76 +3,50 @@ const axios = require('axios');
 const router = express.Router();
 const passport = require('passport');
 const pca = require('../config/passport-setup');
+const {GetAccessID} = require('../config/accessID')
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), async (req, res) => {
+    const AuthID = req.user.id; // Assuming you're using the user's ID from LinkedIn as AuthID
+    try {
+        // Call the GetAccessID function to retrieve additional details
+        const data = await GetAccessID(AuthID);
+        const accessCode = data.accessCode;
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    const user = {
-        id: req.user.id,  
-        provider: 'Google'
-    };
+        // Store the accessCode in session or cookie
+        req.session.accessCode = accessCode; // or res.cookie('accessCode', accessCode, { httpOnly: true });
 
-    // Post to your API
-    axios.post('https://prod-08.northcentralus.logic.azure.com:443/workflows/a866db458a254ce38fb746a844b1fb91/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vOVP3IY0qM4C0o5lHIC_7_pkoE7X78gF5EJ5uLwaW98', {
-        TennentID: "fb174ad5-c5b5-452d-8240-34675b784ba5",
-        TypeOfRequest: "GetMinsideIDs"  
-    })
-    .then(apiResponse => {
-        if (apiResponse.data && apiResponse.data.eaas) {
-            // If user is found, log them in and proceed
-            user.eaasID=apiResponse.data.eaas
-            user.klimaID=apiResponse.data.klima
-            user.combinedData = {
-                projects: apiResponse.data.eaas.map(p => ({ projectId: p.ProjectID, projectName: p.Projectname })),
-                ouids: apiResponse.data.klima.map(o => ({ orgUnitId: o.OrgUnitID, orgLevel2: o.OrgLevel2 }))
-            };
-            
-            req.login(user, function(err) {
-                if (err) { return next(err); }
-                return res.redirect('/');  // Redirect to home or dashboard
-            });
-        } else {
-            // If no user is found, redirect to registration page
-            res.redirect('/register');
-        }
-    })
-    .catch(error => {
-        console.error("Error posting to API:", error);
-        res.status(500).send('Authorization failed');
-    });
+        // Redirect to the home page after successful login
+        res.redirect('/');
+    } catch (error) {
+        console.error('Error fetching access IDs:', error);
+        res.redirect('/register'); // Redirect to register if something goes wrong
+    }
 });
+
+
 
 router.get('/linkedin', passport.authenticate('linkedin'));
 
-router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), (req, res) => {
-    const user = {
-        id: req.user.id,  
-        provider: 'linkedin'
-    };
-    // Post to your API
-    axios.post('https://prod-08.northcentralus.logic.azure.com:443/workflows/a866db458a254ce38fb746a844b1fb91/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vOVP3IY0qM4C0o5lHIC_7_pkoE7X78gF5EJ5uLwaW98', {
-        TennentID: "fb174ad5-c5b5-452d-8240-34675b784ba5",
-        TypeOfRequest: "GetMinsideIDs"  
-    })
-    .then(apiResponse => {
-        if (apiResponse.data && apiResponse.data.eaas) {
-            // If user is found, log them in and proceed
-            user.eaasID=apiResponse.data.eaas
-            user.klimaID=apiResponse.data.klima
-            req.login(user, function(err) {
-                if (err) { return next(err); }
-                return res.redirect('/');  // Redirect to home or dashboard
-            });
-        } else {
-            // If no user is found, redirect to registration page
-            res.redirect('/register');
-        }
-    })
-    .catch(error => {
-        console.error("Error posting to API:", error);
-        res.status(500).send('Authorization failed');
-    });
+router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), async (req, res) => {
+    const AuthID = req.user.id; // Assuming you're using the user's ID from LinkedIn as AuthID
+
+    try {
+        // Call the GetAccessID function to retrieve additional details
+        const data = await GetAccessID(AuthID);
+        const accessCode = data.accessCode;
+
+        // Store the accessCode in session or cookie
+        req.session.accessCode = accessCode; // or res.cookie('accessCode', accessCode, { httpOnly: true });
+
+        // Redirect to the home page after successful login
+        res.redirect('/');
+    } catch (error) {
+        console.error('Error fetching access IDs:', error);
+        res.redirect('/register'); // Redirect to register if something goes wrong
+    }
 });
+
 
 
 // Azure AD login route
@@ -94,45 +68,41 @@ router.get('/azuread', (req, res) => {
         });
 });
 
-router.get('/azuread/callback', (req, res, next) => {
+router.get('/azuread/callback', async (req, res, next) => {
     const tokenRequest = {
         code: req.query.code,
         scopes: ["user.read"],
         redirectUri: 'http://localhost:3000/auth/azuread/callback',
     };
 
-    pca.acquireTokenByCode(tokenRequest).then(response => {
+    try {
+        const response = await pca.acquireTokenByCode(tokenRequest);
         const user = {
             id: response.account.localAccountId,
             provider: 'Microsoft',
         }
-        axios.post('https://prod-08.northcentralus.logic.azure.com:443/workflows/a866db458a254ce38fb746a844b1fb91/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vOVP3IY0qM4C0o5lHIC_7_pkoE7X78gF5EJ5uLwaW98', {
-            TennentID: user.id,
-            TypeOfRequest: "GetMinsideIDs"  
-        })
-        .then(apiResponse => {
-            if (apiResponse.data && apiResponse.data.eaas) {
-                // If user is found, log them in and proceed
-                user.eaasID=apiResponse.data.eaas
-                user.klimaID=apiResponse.data.klima
-                req.login(user, function(err) {
-                    if (err) { return next(err); }
-                    return res.redirect('/');  // Redirect to home or dashboard
-                });
-            } else {
-                // If no user is found, redirect to registration page
-                res.redirect('/register');
-            }
-        })
-        .catch(error => {
-            console.error("Error posting to API:", error);
-            res.status(500).send('Authorization failed');
-        });
-    }).catch(error => {
-        console.error(error);
+
+        const apiResponse = await GetAccessID(user.id);
+        if (apiResponse.accessCode && apiResponse.userData) {
+            // Attach accessCode and userData to user object
+            user.accessCode = apiResponse.accessCode;
+            user.userData = apiResponse.userData;
+
+            // Log the user in with Passport, storing the accessCode in the session
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.redirect('/');  // Redirect to home/dashboard
+            });
+        } else {
+            res.redirect('/register');
+        }
+    } catch (error) {
+        console.error("Error during authentication:", error);
         res.status(500).send('Authentication failed');
-    });
+    }
 });
+
+
 
 
 

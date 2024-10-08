@@ -11,17 +11,14 @@ let currentReportPageName = null;
 
 // Function to embed a Power BI report with the given filters
 function embedReport(reportId, projectFilterValues = []) {
+
     // Default to all projects and OUIDs if no specific filters are provided
     if (!projectFilterValues || projectFilterValues.length === 0) {
-        projectFilterValues = getProjectAccessDetails().map(project => project.projectId);
-        // console.log('No specific project filters provided, applying all project IDs:', projectFilterValues);  // Debugging log
+        projectFilterValues = getProjectAccessDetails().map(project => project.projectID);
     }
 
     // Extract the OUIDs from projectAccessDetails
-    const ouidFilterValues = getProjectAccessDetails().map(project => project.OUID);
-    // console.log('Applying OUIDs on first render:', ouidFilterValues);  // Debugging log
-
-    // console.log('Embedding report with Project IDs:', projectFilterValues, 'and OUIDs:', ouidFilterValues);  // Log filters being applied
+    const ouidFilterValues = getProjectAccessDetails().map(project => project.orgID);
 
     // Clear previous instance before embedding
     powerBIService.reset(reportContainerElement);
@@ -46,7 +43,7 @@ function embedReport(reportId, projectFilterValues = []) {
                         column: "OrgUnitID"
                     },
                     operator: "In",
-                    values: ouidFilterValues  // Apply OUIDs directly
+                    values: ouidFilterValues.filter(id => id !== null)
                 }
             ];
 
@@ -58,7 +55,7 @@ function embedReport(reportId, projectFilterValues = []) {
                 id: embedInfo.reportId,
                 filters: filters,
                 settings: {
-                    filterPaneEnabled: false,
+                    filterPaneEnabled: true,
                     navContentPaneEnabled: false,
                     layoutType: 3
                 }
@@ -66,34 +63,6 @@ function embedReport(reportId, projectFilterValues = []) {
 
             // Embed the report
             reportInstance = powerBIService.embed(reportContainerElement, reportConfig);
-
-            // // Handle report loaded event
-            // reportInstance.on('loaded', async () => {
-            //     try {
-            //         adjustReportContainerDimensions();
-            //         window.addEventListener('resize', adjustReportContainerDimensions);
-
-            //         // // Populate page selector with report pages
-            //         // const reportPages = await reportInstance.getPages();
-            //         // populatePageDropdown(reportPages);  // Populate the dropdown with pages
-
-            //        // // Re-apply the captured page after the report is loaded
-            //         // if (currentReportPageName) {
-            //         //     const page = reportPages.find(p => p.name === currentReportPageName);
-            //         //     if (page) {
-            //         //         await reportInstance.setPage(page.name);
-            //         //         console.log('Re-applying page:', page.name);  // Log the page being re-applied
-            //         //     } else {
-            //         //         console.warn('The previous page was not found in the report.');
-            //         //     }
-            //         // }
-
-            //         // // Ensure page navigation works after embedding
-            //         // document.getElementById('reportPageSelect').addEventListener('change', navigateReportPage);
-            //     } catch (error) {
-            //         console.error('Error navigating to the page:', error);
-            //     }
-            // });
         })
         .catch(error => {
             console.error('Error loading report:', error);
@@ -103,25 +72,31 @@ function embedReport(reportId, projectFilterValues = []) {
 
 
 
+
+
+
+
 // Function to update filters without re-rendering the report
 async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
-    // console.log('Updating report filters with Project IDs:', selectedProjectIds, 'and OUIDs:', selectedOUIDs);  // Debugging log
+    console.log('Updating report filters with Project IDs:', selectedProjectIds, 'and OUIDs:', selectedOUIDs);
 
+    // Check if no selections were made
     if (!selectedProjectIds || selectedProjectIds.length === 0) {
-        // If no projects are selected, apply all available project IDs
-        selectedProjectIds = getProjectAccessDetails().map(project => project.projectId);
-        // console.log('No projects selected, applying all projects:', selectedProjectIds);  // Debugging log
+        selectedProjectIds = getProjectAccessDetails()
+            .map(project => project.projectID)
+            .filter(id => id !== null && id !== undefined && !isNaN(id));  // Filter out invalid project IDs
+        console.log('No projects selected, applying all valid project IDs:', selectedProjectIds);
     }
 
     if (!selectedOUIDs || selectedOUIDs.length === 0) {
-        // If no OUIDs are selected, apply all available OUIDs
-        selectedOUIDs = getProjectAccessDetails().map(project => project.OUID);
-        // console.log('No OUIDs selected, applying all OUIDs:', selectedOUIDs);  // Debugging log
+        selectedOUIDs = getProjectAccessDetails()
+            .map(project => project.orgID)
+            .filter(id => id !== null && id !== undefined && !isNaN(id));  // Filter out invalid OUIDs
+        console.log('No OUIDs selected, applying all valid OUIDs:', selectedOUIDs);
     }
 
     if (reportInstance) {
         try {
-            // Define the new filters
             const filters = [
                 {
                     $schema: "http://powerbi.com/product/schema#basic",
@@ -130,7 +105,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                         column: "ProjectID"
                     },
                     operator: "In",
-                    values: selectedProjectIds.map(Number)  // Ensure filter values are numbers
+                    values: selectedProjectIds.map(Number)  // Ensure valid project IDs as numbers
                 },
                 {
                     $schema: "http://powerbi.com/product/schema#basic",
@@ -139,20 +114,22 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                         column: "OrgUnitID"
                     },
                     operator: "In",
-                    values: selectedOUIDs  // Apply OUIDs directly
+                    values: selectedOUIDs  // Ensure valid OUIDs
                 }
             ];
 
-            // Apply the filters to the report
+            console.log('Applying filters:', filters);
+
             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
-            // console.log('Filters updated successfully:', filters);  // Log success
+            console.log('Filters updated successfully');
         } catch (error) {
-            console.error('Error updating filters:', error);  // Log any errors
+            console.error('Error updating filters:', error);
         }
     } else {
-        console.warn('Report instance is not available.');  // Warn if report instance is not found
+        console.warn('Report instance is not available.');
     }
 }
+
 
 
 

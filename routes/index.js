@@ -5,22 +5,21 @@ require('dotenv').config();
 
 const {fetchPowerBIEmbedInfo,reportsList} = require('../config/powerbiEmbed-setup');
 
-
-
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
-        res.render('dashboard', { 
-            title: 'GreenSide',
-            id: req.user.id,
-            provider:req.user.provider,
-            eaasID:req.user.eaasID,
-            klimaID:req.user.klimaID,
-            combinedData:req.user.combinedData
-        });
+        const accessCode = req.user.accessCode || req.session.accessCode || null; // Retrieve accessCode from req.user
+        if (accessCode) {
+            res.render('dashboard', { title: 'GreenSide', accessCode: JSON.stringify(accessCode) });
+        } else {
+            console.log('No access code, redirecting to login');
+            res.redirect('/login');
+        }
     } else {
+        console.log('User not authenticated, redirecting to login');
         res.redirect('/login');
     }
 });
+
 
 // Endpoint to serve the REPORT_1_ID to the client
 router.get('/config', (req, res) => {
@@ -54,7 +53,7 @@ router.get('/login', (req, res) => {
 });
 
 //logout route
-router.post('/logout', (req, res) => {
+router.post('/logout', (req, res, next) => {
     req.logout((err) => {
         if (err) { return next(err); }
         req.session.destroy((err) => {

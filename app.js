@@ -5,13 +5,19 @@ const exphbs = require('express-handlebars');
 const passport = require('passport')
 const authRoutes = require('./routes/auth');
 const indexRoutes = require('./routes/index');
+const handlebars = require('handlebars'); // Explicitly require handlebars
 
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.engine('hbs', exphbs.engine({ extname: '.hbs', defaultLayout: 'main' }));
+app.engine('hbs', exphbs.engine({ extname: '.hbs', defaultLayout: 'main', helpers: {
+    safe: function (object) {
+        return new handlebars.SafeString(JSON.stringify(object));
+    }
+
+}}));
 app.set('view engine', 'hbs');
 
 app.set('views', './views');  // Ensure views directory is set correctly
