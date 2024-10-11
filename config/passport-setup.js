@@ -4,9 +4,10 @@ const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 
 const { ConfidentialClientApplication } = require('@azure/msal-node');
 const msalConfig = require('./msalConfig');
-
 const pca = new ConfidentialClientApplication(msalConfig);
 const CustomStrategy = require('passport-custom').Strategy;
+
+
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -39,7 +40,8 @@ passport.use(new LinkedInStrategy({
 
 
 passport.use('azuread', new CustomStrategy((req, done) => {
-    const redirectUri = 'http://localhost:3000/auth/azuread/callback';
+    // const redirectUri = 'http://localhost:3000/auth/azuread/callback';
+    const redirectUri = '/auth/azuread/callback';
     const authCodeUrlParameters = {
         scopes: ["user.read"],
         redirectUri: redirectUri,

@@ -1,4 +1,4 @@
-<!-- views/layouts/main.hbs -->
+{{!-- <!-- views/layouts/main.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,8 +87,6 @@
     </div>
 
     <script src="/js/main.js"></script>
-    <script src="/js/powerbiEmbed.js"></script>
-    <script src="/js/filterHandler.js"></script> 
     <script>
     $(document).ready(function() {
         // Get the current year and last month in UTC
@@ -180,12 +178,156 @@
 </script>
 
 
-
-
-    
     
 </body>
+</html> --}}
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+
+    <!-- Load jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Then load Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Load Power BI JS -->
+    <script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.18.5/dist/powerbi.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header__logo">
+            <img src="/images/logo_transparant_white.png" alt="Greenside Logo">
+        </div>
+        <div class="header__navigation">
+            <form action="/logout" method="post">
+                <button type="submit">logg ut</button>
+            </form>
+        </div>
+        <div class="header__toggle-menu" onclick="toggleSidebar()">
+            &#9776;
+        </div>
+    </div>
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <ul id="reportMenu" class="sidebar__menu">
+                <!-- Report menu items will be dynamically added here -->
+            </ul>
+
+            <div class="sidebar__filter">
+                <label for="projectFilterSelect" class="sidebar__filter-label">Prosjekt velger</label>
+                <select id="projectFilterSelect" class="sidebar__filter-select" multiple="multiple">
+                    <!-- Project options will be dynamically added here -->
+                </select>
+            </div>
+            
+            <button id="toggleDatePickers" class="toggle-button" style="display: none;">Toggle Date Pickers</button>
+            
+            <div class="filter-container" id="datePickersContainer">
+                <!-- Year List -->
+                <div class="filter-year">
+                    <label for="yearSelect">År</label>
+                    <div id="yearList" class="filter-list">
+                        <!-- Dynamic year options will be added here -->
+                    </div>
+                </div>
+
+                <!-- Month List -->
+                <div class="filter-month">
+                    <label for="monthSelect">Måned</label>
+                    <div id="monthList" class="filter-list">
+                        <label><input type="checkbox" value="01"> Jan</label>
+                        <label><input type="checkbox" value="02"> Feb</label>
+                        <label><input type="checkbox" value="03"> Mar</label>
+                        <label><input type="checkbox" value="04"> Apr</label>
+                        <label><input type="checkbox" value="05"> Mai</label>
+                        <label><input type="checkbox" value="06"> Jun</label>
+                        <label><input type="checkbox" value="07"> Jul</label>
+                        <label><input type="checkbox" value="08"> Aug</label>
+                        <label><input type="checkbox" value="09"> Sep</label>
+                        <label><input type="checkbox" value="10"> Okt</label>
+                        <label><input type="checkbox" value="11"> Nov</label>
+                        <label><input type="checkbox" value="12"> Des</label>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar__contact">
+                <a class="sidebar__contact-link" href="https://www.greennorway.no/contact-1" target="_blank">
+                    <i class="fas fa-envelope"></i>Kontakt oss
+                </a>
+            </div>
+        </aside>
+        <main class="main-content">
+            {{{body}}}
+        </main>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentYear = new Date().getUTCFullYear();
+        const startYear = 2020;
+        const yearList = document.getElementById('yearList');
+        const datePickersContainer = document.getElementById('datePickersContainer');
+        const toggleButton = document.getElementById('toggleDatePickers');
+
+        // Populate the year list dynamically
+        for (let year = currentYear; year >= startYear; year--) {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = year;
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(year));
+            yearList.appendChild(label);
+        }
+
+        // Initialize Select2 on the project select
+        $('#projectFilterSelect').select2({
+            placeholder: 'Velg prosjekter',
+            allowClear: true,
+            dropdownAutoWidth: true,
+            width: '100%'
+        });
+
+        // Toggle date pickers visibility
+        toggleButton.addEventListener('click', function() {
+            if (datePickersContainer.style.display === 'none' || !datePickersContainer.style.display) {
+                datePickersContainer.style.display = 'flex';
+            } else {
+                datePickersContainer.style.display = 'none';
+            }
+        });
+
+        // Check the initial height of the window and hide date pickers if necessary
+        if (window.innerHeight < 700) { // Adjust the height threshold as needed
+            datePickersContainer.style.display = 'none';
+            toggleButton.style.display = 'block';
+        }
+
+        // Ensure the year and month lists have the same height
+        const yearListHeight = yearList.offsetHeight;
+        const monthList = document.getElementById('monthList');
+        monthList.style.height = `${yearListHeight}px`;
+    });
+    </script>
+</body>
 </html>
-
-
-

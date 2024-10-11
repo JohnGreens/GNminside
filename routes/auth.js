@@ -5,6 +5,11 @@ const passport = require('passport');
 const pca = require('../config/passport-setup');
 const {GetAccessID} = require('../config/accessID')
 
+
+
+
+
+
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), async (req, res) => {
     const AuthID = req.user.id; // Assuming you're using the user's ID from LinkedIn as AuthID
@@ -51,11 +56,10 @@ router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedi
 
 // Azure AD login route
 router.get('/azuread', (req, res) => {
-    const redirectUri = 'http://localhost:3000/auth/azuread/callback';
-
+    // const redirectUri = 'http://localhost:3000/auth/azuread/callback';
     const authCodeUrlParameters = {
         scopes: ["user.read"],
-        redirectUri: redirectUri,
+        redirectUri: process.env.Azure_CALLBACK_URL,
     };
 
     pca.getAuthCodeUrl(authCodeUrlParameters)
@@ -72,7 +76,7 @@ router.get('/azuread/callback', async (req, res, next) => {
     const tokenRequest = {
         code: req.query.code,
         scopes: ["user.read"],
-        redirectUri: 'http://localhost:3000/auth/azuread/callback',
+        redirectUri: process.env.Azure_CALLBACK_URL,
     };
 
     try {

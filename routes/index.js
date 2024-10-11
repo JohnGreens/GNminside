@@ -20,6 +20,10 @@ router.get('/', (req, res) => {
     }
 });
 
+router.get('/test', (req, res) => {
+            res.render('dashboard', { title: 'GreenSide' });
+});
+
 
 // Endpoint to serve the REPORT_1_ID to the client
 router.get('/config', (req, res) => {

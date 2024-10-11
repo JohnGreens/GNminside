@@ -2,14 +2,6 @@
 
 <div id="reportContainer" class="report-container"></div>
 <script>
-   // Parse the JSON string from the server-side into a JavaScript object
+   // Parse the JSON string from the server-side into a JavaScript object, the accessCode is returned by the routes
     const projectAccessDetails = JSON.parse({{safe accessCode}});
-    
-    // Function to return project access details
-    function getProjectAccessDetails() {
-        return Array.isArray(projectAccessDetails) ? projectAccessDetails : [];
-    }
-
-
-    window.getProjectAccessDetails = getProjectAccessDetails;
 </script>

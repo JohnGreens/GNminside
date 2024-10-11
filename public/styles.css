@@ -152,30 +152,6 @@ body {
     margin-right: 10px;
 }
 
-/* .header__navigation {
-    display: flex;
-    align-items: center;
-}
-
-.header__navigation-label {
-    margin-right: 10px;
-    font-size: 16px;
-    color: white;
-} */
-
-/* .header__navigation-select {
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    background-color: #e5ecef;
-    color: #3A5347;
-    font-size: 16px;
-} */
-
-/* .header__navigation-select:hover {
-    background-color: #3A5347;
-    color: white; 
-}*/
 
 .header__toggle-menu {
     font-size: 28px;
@@ -190,9 +166,11 @@ body {
     overflow: hidden;
 }
 
+
+
 /* Sidebar styles */
 .sidebar {
-    width: 250px;
+    width: 200px;
     background-color: #e5ecef;
     padding: 15px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -203,6 +181,7 @@ body {
     justify-content: space-between;
 }
 
+/* Sidebar report selector only */
 .sidebar__menu {
     list-style: none;
     padding: 0;
@@ -234,45 +213,47 @@ body {
     color: white;
 }
 
+
+
+/* Sidebar project selector only */
 .sidebar__filter {
     margin-top: 10px;
 }
 
-.sidebar__filter-label,
-.filter-container label {
-    margin-bottom: 5px;
+.sidebar__filter-label{
+    margin-bottom: 3px;
     display: block;
     font-size: 14px;
     color: #3A5347;
 }
 
-.sidebar__filter-select, 
-.filter-select {
+.sidebar__filter-select{
     margin-bottom: 10px;
-    padding: 10px 15px;
+    padding: 10px 5px;
     border-radius: 5px;
     border: none;
     background-color: #e5ecef;
     color: #3A5347;
-    font-size: 16px;
+    font-size: 8px;
     width: 100%;
     box-sizing: border-box;
     transition: all 0.3s;
 }
 
-.sidebar__filter-select:hover, 
-.filter-select:hover {
+
+.sidebar__filter-select:hover{
     background-color: #3A5347;
     color: white;
 }
 
-.sidebar__filter-select:focus, 
-.filter-select:focus {
+.sidebar__filter-select:focus{
     outline: none;
     background-color: #3A5347;
     color: white;
 }
 
+
+/* Prevent the contact link from being pushed off the page */
 .sidebar__contact {
     text-align: center;
     margin-top: auto;
@@ -347,40 +328,65 @@ body {
 }
 
 
-/* .filter-container {
-    display: flex;
-    gap: 20px;
-    margin: 20px;
-}
-
-.filter-year, .filter-month {
-    display: flex;
-    flex-direction: column;
-} */
-
-/* .filter-select {
-    width: 200px;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-} */
 
 
+
+
+
+
+
+
+
+/* public/styles.css */
+/* public/styles.css */
 
 .filter-container {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;  /* Adjust to align spacing */
+    flex-direction: row; /* Change to row to place items side by side */
+    gap: 10px; /* Adjust gap between year and month selectors */
+    margin-top: 10px;  /* Adjust to align spacing */
 }
 
-/* .filter-year, .filter-month {
-    width: 100%;
-} */
+.filter-year, .filter-month {
+    flex: 1; /* Make both selectors take equal space */
+}
 
-/* .filter-select {
+.filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #ffffff;
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+}
+
+.filter-list label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.filter-list input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.toggle-button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     width: 100%;
-    padding: 8px;
-    font-size: 14px;
-} */
+    text-align: center;
+    display: none; /* Initially hidden */
+}
+
+.toggle-button:hover {
+    background-color: #0056b3;
+}
