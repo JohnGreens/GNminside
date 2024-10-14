@@ -381,23 +381,30 @@ function toggleSidebar() {
     // console.log('Sidebar toggled. Active state:', sidebarElement.classList.contains('active'));  // Debugging log
 }
 
-// Fetch reports from the server and populate the report menu
-async function fetchAndPopulateReports() {
-    const response = await fetch('/reports');
-    const reports = await response.json();
 
-    const reportMenuElement = document.getElementById('reportMenu');
-    reportMenuElement.innerHTML = ''; // Clear previous items
 
-    reports.forEach(report => {
-        const menuItemElement = document.createElement('li');
-        menuItemElement.classList.add('sidebar__menu-item');
-        menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${report.name}</a>`;
-        reportMenuElement.appendChild(menuItemElement);
-    });
+// Function to save the last accessed report ID in localStorage
+function saveLastReportId(reportId) {
+    localStorage.setItem('lastReportId', reportId);
 }
+// // Fetch reports from the server and populate the report menu
+// async function fetchAndPopulateReports() {
+//     const response = await fetch('/reports');
+//     const reports = await response.json();
+
+//     const reportMenuElement = document.getElementById('reportMenu');
+//     reportMenuElement.innerHTML = ''; // Clear previous items
+
+//     reports.forEach(report => {
+//         const menuItemElement = document.createElement('li');
+//         menuItemElement.classList.add('sidebar__menu-item');
+//         menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${report.name}</a>`;
+//         reportMenuElement.appendChild(menuItemElement);
+//     });
+// }
 
 
+window.saveLastReportId = saveLastReportId;
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 //PowerBi rendering and functions --------------------------------------------------------------------------------------------------------------------------
@@ -669,9 +676,6 @@ window.onload = function() {
         .then(response => response.json())
         .then(config => {
             const REPORT_1_ID = config.report1Id;
-
-            // Fetch and populate the reports
-            fetchAndPopulateReports();
 
             const lastReportId = localStorage.getItem('lastReportId') || REPORT_1_ID;
             embedReport(lastReportId, []);
