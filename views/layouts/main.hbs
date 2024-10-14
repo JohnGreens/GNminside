@@ -287,47 +287,50 @@
 
     <script src="/js/main.js"></script>
     <script>
- document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Select2 on the project select
-    $('#projectFilterSelect').select2({
-        placeholder: 'Velg prosjekter',
-        allowClear: true,
-        dropdownAutoWidth: true,
-        width: '100%'
+        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Select2 on the project select
+        $('#projectFilterSelect').select2({
+            placeholder: 'Velg prosjekter',
+            allowClear: true,
+            dropdownAutoWidth: true,
+            width: '100%'
+        });
+
+        // Calculate the last 12 months
+        const end = new Date();
+        const start = new Date();
+        start.setFullYear(end.getFullYear() - 1);
+        start.setMonth(end.getMonth() + 1);
+
+        // Initialize Flatpickr for month and year range selection
+        const monthYearRangePicker = flatpickr("#monthYearRangePicker", {
+            mode: "range",
+            dateFormat: "Y-m",
+            minDate: "2020-01",
+            maxDate: new Date().toISOString().slice(0, 7), // Current month and year
+            defaultDate: [start, end], // Set the last 12 months as default
+            locale: "no", // Set the locale to Norwegian
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true, // defaults to false
+                    dateFormat: "Y-m", // defaults to "F Y"
+                    altFormat: "F Y", // defaults to "F Y"
+                    theme: "light" // defaults to "light"
+                })
+            ],
+            onChange: function(selectedDates, dateStr, instance) {
+                // Ensure both start and end dates are selected before applying the filter
+                if (selectedDates.length === 2) {
+                    applyProjectFilter(); // Call applyProjectFilter when the date range changes
+                }
+            }
+        });
+
+        // Manually set the value of the input field to display the default date range
+        const formattedStart = start.toISOString().slice(0, 7);
+        const formattedEnd = end.toISOString().slice(0, 7);
+        document.getElementById('monthYearRangePicker').value = `${formattedStart} to ${formattedEnd}`;
     });
-
-    // Calculate the last 12 months
-    const end = new Date();
-    const start = new Date();
-    start.setFullYear(end.getFullYear() - 1);
-    start.setMonth(end.getMonth() + 1);
-
-    // Initialize Flatpickr for month and year range selection
-    const monthYearRangePicker = flatpickr("#monthYearRangePicker", {
-        mode: "range",
-        dateFormat: "Y-m",
-        minDate: "2020-01",
-        maxDate: new Date().toISOString().slice(0, 7), // Current month and year
-        defaultDate: [start, end], // Set the last 12 months as default
-        locale: "no", // Set the locale to Norwegian
-        plugins: [
-            new monthSelectPlugin({
-                shorthand: true, // defaults to false
-                dateFormat: "Y-m", // defaults to "F Y"
-                altFormat: "F Y", // defaults to "F Y"
-                theme: "light" // defaults to "light"
-            })
-        ],
-        onChange: function(selectedDates, dateStr, instance) {
-            applyProjectFilter(); // Call applyProjectFilter when the date range changes
-        }
-    });
-
-    // Manually set the value of the input field to display the default date range
-    const formattedStart = start.toISOString().slice(0, 7);
-    const formattedEnd = end.toISOString().slice(0, 7);
-    document.getElementById('monthYearRangePicker').value = `${formattedStart} to ${formattedEnd}`;
-});
     </script>
 </body>
 </html>
