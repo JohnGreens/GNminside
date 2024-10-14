@@ -193,6 +193,18 @@
 
 
 
+
+
+
+
+
+
+{{!-- change --}}
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -203,12 +215,21 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
     <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Load jQuery first -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Load Moment.js -->
+    <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
     <!-- Then load Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Load Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/no.js"></script>
     <!-- Load Power BI JS -->
     <script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.18.5/dist/powerbi.min.js"></script>
 </head>
@@ -239,36 +260,11 @@
                 </select>
             </div>
             
-            <button id="toggleDatePickers" class="toggle-button" style="display: none;">Toggle Date Pickers</button>
-            
-            <div class="filter-container" id="datePickersContainer">
-                <!-- Year List -->
-                <div class="filter-year">
-                    <label for="yearSelect">År</label>
-                    <div id="yearList" class="filter-list">
-                        <!-- Dynamic year options will be added here -->
-                    </div>
-                </div>
-
-                <!-- Month List -->
-                <div class="filter-month">
-                    <label for="monthSelect">Måned</label>
-                    <div id="monthList" class="filter-list">
-                        <label><input type="checkbox" value="01"> Jan</label>
-                        <label><input type="checkbox" value="02"> Feb</label>
-                        <label><input type="checkbox" value="03"> Mar</label>
-                        <label><input type="checkbox" value="04"> Apr</label>
-                        <label><input type="checkbox" value="05"> Mai</label>
-                        <label><input type="checkbox" value="06"> Jun</label>
-                        <label><input type="checkbox" value="07"> Jul</label>
-                        <label><input type="checkbox" value="08"> Aug</label>
-                        <label><input type="checkbox" value="09"> Sep</label>
-                        <label><input type="checkbox" value="10"> Okt</label>
-                        <label><input type="checkbox" value="11"> Nov</label>
-                        <label><input type="checkbox" value="12"> Des</label>
-                    </div>
-                </div>
+            <div class="filter-container">
+                <label for="monthYearRangePicker" class="sidebar__filter-label">Velg dato</label>
+                <input type="text" id="monthYearRangePicker" class="date-range-picker">
             </div>
+            
             <div class="sidebar__contact">
                 <a class="sidebar__contact-link" href="https://www.greennorway.no/contact-1" target="_blank">
                     <i class="fas fa-envelope"></i>Kontakt oss
@@ -283,23 +279,6 @@
     <script src="/js/main.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const currentYear = new Date().getUTCFullYear();
-        const startYear = 2020;
-        const yearList = document.getElementById('yearList');
-        const datePickersContainer = document.getElementById('datePickersContainer');
-        const toggleButton = document.getElementById('toggleDatePickers');
-
-        // Populate the year list dynamically
-        for (let year = currentYear; year >= startYear; year--) {
-            const label = document.createElement('label');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = year;
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(year));
-            yearList.appendChild(label);
-        }
-
         // Initialize Select2 on the project select
         $('#projectFilterSelect').select2({
             placeholder: 'Velg prosjekter',
@@ -308,25 +287,38 @@
             width: '100%'
         });
 
-        // Toggle date pickers visibility
-        toggleButton.addEventListener('click', function() {
-            if (datePickersContainer.style.display === 'none' || !datePickersContainer.style.display) {
-                datePickersContainer.style.display = 'flex';
-            } else {
-                datePickersContainer.style.display = 'none';
+        // Calculate the last 12 months
+        const end = new Date();
+        const start = new Date();
+        start.setFullYear(end.getFullYear() - 1);
+        start.setMonth(end.getMonth() + 1);
+
+        // Initialize Flatpickr for month and year range selection
+        const monthYearRangePicker = flatpickr("#monthYearRangePicker", {
+            mode: "range",
+            dateFormat: "Y-m",
+            minDate: "2020-01",
+            maxDate: new Date().toISOString().slice(0, 7), // Current month and year
+            defaultDate: [start, end], // Set the last 12 months as default
+            locale: "no", // Set the locale to Norwegian
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true, // defaults to false
+                    dateFormat: "Y-m", // defaults to "F Y"
+                    altFormat: "F Y", // defaults to "F Y"
+                    theme: "light" // defaults to "light"
+                })
+            ],
+            onChange: function(selectedDates, dateStr, instance) {
+                console.log("Selected dates:", selectedDates);
+                console.log("Formatted dates:", dateStr);
             }
         });
 
-        // Check the initial height of the window and hide date pickers if necessary
-        if (window.innerHeight < 700) { // Adjust the height threshold as needed
-            datePickersContainer.style.display = 'none';
-            toggleButton.style.display = 'block';
-        }
-
-        // Ensure the year and month lists have the same height
-        const yearListHeight = yearList.offsetHeight;
-        const monthList = document.getElementById('monthList');
-        monthList.style.height = `${yearListHeight}px`;
+        // Manually set the value of the input field to display the default date range
+        const formattedStart = start.toISOString().slice(0, 7);
+        const formattedEnd = end.toISOString().slice(0, 7);
+        document.getElementById('monthYearRangePicker').value = `${formattedStart} to ${formattedEnd}`;
     });
     </script>
 </body>

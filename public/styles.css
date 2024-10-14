@@ -330,63 +330,68 @@ body {
 
 
 
-
-
-
-
-
-
-
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
+/* public/styles.css */
 /* public/styles.css */
 /* public/styles.css */
 
-.filter-container {
-    display: flex;
-    flex-direction: row; /* Change to row to place items side by side */
-    gap: 10px; /* Adjust gap between year and month selectors */
-    margin-top: 10px;  /* Adjust to align spacing */
+body {
+    background-color: #f8f9fa; /* Set a light gray background color */
 }
 
-.filter-year, .filter-month {
-    flex: 1; /* Make both selectors take equal space */
-}
-
-.filter-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.sidebar__filter-input {
+    width: 100%;
     padding: 10px;
     border: 1px solid #ced4da;
     border-radius: 4px;
-    background-color: #ffffff;
-    max-height: 400px; /* Adjust height as needed */
-    overflow-y: auto;
+    box-sizing: border-box;
+    margin-top: 10px;
 }
 
-.filter-list label {
+.date-range-picker {
+    background: #fff;
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    gap: 5px;
-    cursor: pointer;
+    justify-content: space-between;
 }
 
-.filter-list input[type="checkbox"] {
-    margin-right: 10px;
+.date-range-picker i {
+    margin-right: 5px;
 }
 
-.toggle-button {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    text-align: center;
-    display: none; /* Initially hidden */
+.daterangepicker {
+    z-index: 1000; /* Ensure the calendar appears above other elements */
 }
 
-.toggle-button:hover {
-    background-color: #0056b3;
+@media (max-height: 400px) {
+    .filter-container {
+        display: none; /* Hide the filter container on small screens */
+    }
+    .toggle-button {
+        display: block; /* Show the toggle button on small screens */
+    }
 }

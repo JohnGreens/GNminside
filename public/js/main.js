@@ -78,6 +78,42 @@ function embedReport(reportId, projectFilterValues = []) {
                     },
                     operator: "In",
                     values: ouidFilterValues.filter(id => id !== null)
+                },
+                // {
+                //     $schema: "http://powerbi.com/product/schema#basic",
+                //     target: {
+                //         table: "Min Side Period",
+                //         column: "År" //datetime object
+                //     },
+                //     operator: "In",
+                //     values: [2024]  // Apply OUIDs directly TIDSPUNKT Sliser med
+                // },
+                // {
+                //     $schema: "http://powerbi.com/product/schema#basic",
+                //     target: {
+                //         table: "Min Side Period",
+                //         column: "Måned" //datetime object
+                //     },
+                //     operator: "In",
+                //     values: 12  // Apply OUIDs directly TIDSPUNKT Sliser med
+                // },
+                {
+                    $schema: "https://powerbi.com/product/schema#advanced",
+                    target: {
+                        table: "Min Side Period",
+                        column: "DateTime"
+                    },
+                    logicalOperator: "And",
+                    conditions: [
+                        {
+                            operator: "LessThan",
+                            value: "2024-01-01T00:00:00Z"  // ISO 8601 format for the upper bound
+                        },
+                        {
+                            operator: "GreaterThan",
+                            value: "2023-05-01T00:00:00Z"  // ISO 8601 format for the lower bound
+                        }
+                    ]
                 }
             ];
 
@@ -89,7 +125,7 @@ function embedReport(reportId, projectFilterValues = []) {
                 id: embedInfo.reportId,
                 filters: filters,
                 settings: {
-                    filterPaneEnabled: false,
+                    filterPaneEnabled: true,
                     navContentPaneEnabled: false,
                     layoutType: 3
                 }
