@@ -267,7 +267,9 @@ body {
     border: 1px solid #e0e0e0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
+.displayAreaViewport{
+    background-color:#EFF6F0 !important ;
+}
 /* Media Queries for responsive design */
 @media (max-width: 768px) {
     .header__toggle-menu {
