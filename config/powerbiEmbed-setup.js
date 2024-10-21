@@ -1,4 +1,5 @@
 const axios = require('axios');
+require('dotenv').config();
 // Function to fetch Power BI embedding information for a specific report
 async function fetchPowerBIEmbedInfo(reportId) {
     const workspaceId = process.env.POWERBI_WORKSPACE_ID;

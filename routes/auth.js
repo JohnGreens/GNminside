@@ -4,7 +4,7 @@ const router = express.Router();
 const passport = require('passport');
 const pca = require('../config/passport-setup');
 const {GetAccessID} = require('../config/accessID')
-
+require('dotenv').config();
 
 
 

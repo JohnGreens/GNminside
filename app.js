@@ -6,7 +6,7 @@ const passport = require('passport')
 const authRoutes = require('./routes/auth');
 const indexRoutes = require('./routes/index');
 const handlebars = require('handlebars'); // Explicitly require handlebars
-
+require('dotenv').config();
 
 
 const app = express();
