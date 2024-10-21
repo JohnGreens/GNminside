@@ -22,6 +22,8 @@ app.set('view engine', 'hbs');
 
 app.set('views', './views');  // Ensure views directory is set correctly
 
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));

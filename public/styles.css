@@ -1,130 +1,15 @@
 /* public/styles.css */
 
-.login-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-.login-box {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    display: flex;
-    width: 800px;
-    max-width: 90%;
-    overflow: hidden;
-}
-
-.login-left,
-.login-right {
-    padding: 40px;
-}
-
-.login-left {
-    background-color: #f7f7f7;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-
-.logo {
-    margin-bottom: 20px;
-    width: 120px; /* Increase the width */
-    height: auto; /* Maintain aspect ratio */
-}
-
-
-
-.login-right {
-    flex: 1;
-    background-color: #ffffff;
-    text-align: center;
-}
-
-.login-right h3 {
-    font-size: 18px;
-    margin-bottom: 30px;
-}
-
-.oauth-buttons {
-    display: flex;
-    flex-direction: column;
-}
-
-.oauth {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 10px;
-    text-decoration: none;
-}
-
-.oauth i {
-    font-size: 20px;
-    margin-right: 10px;
-}
-
-.oauth.google {
-    background-color: #db4437;
-}
-
-.oauth.google:hover {
-    background-color: #c23321;
-}
-
-.oauth.microsoft {
-    background-color: #2b579a;
-}
-
-.oauth.microsoft:hover {
-    background-color: #1a468c;
-}
-
-.oauth.linkedin {
-    background-color: #0077b5;
-}
-
-.oauth.linkedin:hover {
-    background-color: #005983;
-}
-
-.cookie-notice {
-    font-size: 12px;
-    color: #888;
-    margin-top: 20px;
-}
 
 
 /* Global styles */
 body {
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: 'Calibri';/*,'Roboto', Arial, sans-serif;*/
     margin: 0;
     padding: 0;
     height: 100vh;
     overflow: hidden;
-    background-color: #f5f5f5; /* Light gray background */
+    background-color: #EFF6F0; /* Light gray background */
     color: #333;
 }
 
@@ -158,6 +43,59 @@ body {
     cursor: pointer;
     display: none; /* Initially hidden, visible only on small screens */
 }
+/* Style the sign-out button to match the design */
+/* .header__logout-button {
+    background-color: #495851; 
+    color: #e9e9e9; 
+    border: 1px solid #ced4da; 
+    border-radius: 15px; 
+    padding: 5px 15px; 
+    font-family: 'Calibri', sans-serif; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    
+} 
+
+.header__logout-button:hover {
+    background-color: #3A5347; 
+    color: white;
+    border-color: #3A5347; 
+}
+
+.header__logout-button:focus {
+    outline: none; 
+    box-shadow: 0 0 5px rgba(58, 83, 71, 0.5); 
+}
+    */
+.header__logout-button {
+    background-color: #3A5347; 
+    color: #e9e9e9; 
+    
+    margin: 5px;
+    padding: 5px 15px; 
+    font-family: 'Calibri', sans-serif; 
+    font-size: 16px; 
+    cursor: pointer; 
+    border-radius: 15px; 
+    transition: all 0.3s; 
+    border: 1px solid #3A5347; 
+    
+}
+
+.header__logout-button:hover {
+    
+    background-color: #64776e; 
+    color: white;
+    border-color: #3A5347; 
+    border: 1px solid #64776e; 
+    
+}
+
+.header__logout-button:focus {
+    outline: none; 
+    box-shadow: 0 0 5px rgba(58, 83, 71, 0.5); 
+}
 
 /* Layout styles */
 .layout {
@@ -181,79 +119,99 @@ body {
     justify-content: space-between;
 }
 
-/* Sidebar report selector only */
-.sidebar__menu {
+/* Sidebar report menu  */
+.sidebar__reportmenu {
+    /* font-family: Calibri; */
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.sidebar__menu-item {
-    margin-bottom: 10px;
+.sidebar__reportmenu-item {
+    margin-bottom: 5px;
 }
 
-.sidebar__menu-item a {
+.sidebar__reportmenu-item a {
     text-decoration: none;
     color: #3A5347;
     display: block;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 8px 12px;
+    border-radius: 15px;
     transition: all 0.3s;
     display: flex;
     align-items: center;
 }
 
-.sidebar__menu-item a i {
+.sidebar__reportmenu-item a i {
     margin-right: 10px;
     width: 20px;
 }
 
-.sidebar__menu-item a:hover {
+.sidebar__reportmenu-item a:hover {
     background-color: #3A5347;
     color: white;
 }
 
+::placeholder {
+    color: #333 !important;
+    opacity: 1; /* Firefox */
+  }
 
 
-/* Sidebar project selector only */
-.sidebar__filter {
+/* Sidebar project filter */
+.sidebar__projectfilter {
+
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.sidebar__filter-label{
+.sidebar__projectfilter-label{
+    margin-left: 15px;
+    margin-top: 0;
     margin-bottom: 3px;
     display: block;
-    font-size: 14px;
+    /* font-size: 20px; */
     color: #3A5347;
 }
 
-.sidebar__filter-select{
+.sidebar__projectfilter-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* margin-top: 10px; */
+}
+
+.sidebar__projectfilter-select{
     margin-bottom: 10px;
-    padding: 10px 5px;
+    padding: 10px 10px;
     border-radius: 5px;
     border: none;
     background-color: #e5ecef;
     color: #3A5347;
-    font-size: 8px;
+    /* font-size: 200px; */
     width: 100%;
     box-sizing: border-box;
     transition: all 0.3s;
 }
 
-
-.sidebar__filter-select:hover{
+.sidebar__projectfilter-select:hover{
     background-color: #3A5347;
     color: white;
 }
 
-.sidebar__filter-select:focus{
+.sidebar__projectfilter-select:focus{
     outline: none;
     background-color: #3A5347;
     color: white;
 }
 
 
-/* Prevent the contact link from being pushed off the page */
+
+
+
+/* Sidebar contact us link*/
 .sidebar__contact {
     text-align: center;
     margin-top: auto;
@@ -280,6 +238,17 @@ body {
 .sidebar__contact-link i {
     margin-right: 8px;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /* Main content styles */
 .main-content {
@@ -354,17 +323,10 @@ body {
 /* public/styles.css */
 
 body {
-    background-color: #f8f9fa; /* Set a light gray background color */
+    background-color: #EFF6F0; /* Set a light gray background color f8f9fa*/ 
 }
 
-.sidebar__filter-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-top: 10px;
-}
+
 
 .date-range-picker {
     background: #fff;
@@ -393,5 +355,288 @@ body {
     }
     .toggle-button {
         display: block; /* Show the toggle button on small screens */
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Ensure Flatpickr uses the same font-family, color, and text size */
+.flatpickr-calendar {
+    font-family: 'Calibri';
+    color: #333; /* Match the color used in the body */
+    font-size: 16px; /* Adjust the font size as needed */
+}
+
+.flatpickr-input {
+    font-family: 'Calibri';
+    color: #333; /* Match the color used in the body */
+    font-size: 16px; /* Adjust the font size as needed */
+}
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
+    background-color: #3A5347 !important;
+}
+.flatpickr-monthSelect-month.selected, .flatpickr-monthSelect-month.startRange, .flatpickr-monthSelect-month.endRange{
+    background-color: #3A5347 !important;
+    border-color: #3A5347 !important;
+}
+
+/* Ensure Select2 elements use the same font-family, color, and text size */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+    font-family: 'Calibri';
+    color: #333; /* Match the color used in the body */
+    font-size: 16px; /* Adjust the font size as needed */
+    background-color: #fff; /* White background */
+    border: 1px solid #ced4da; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 5px 0px 10px 5px !important; 
+    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+    font-family: 'Calibri' !important;
+    color: #333 !important;
+}
+
+/* Hover and focus states for Select2 elements */
+.select2-container--default .select2-selection--single:hover,
+.select2-container--default .select2-selection--multiple:hover,
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default .select2-selection--multiple:focus {
+    border-color: #3A5347; /* Dark green border on hover and focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Ensure Select2 dropdown uses the same font-family, color, and text size */
+.select2-container--default .select2-results__option {
+    
+    font-family: 'Calibri';
+    color: #333; /* Match the color used in the body */
+    font-size: 15px; /* Adjust the font size as needed */
+}
+
+/* Additional styles for Select2 dropdown */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #3A5347; /* Dark green background for highlighted option */
+    color: white; /* White text for highlighted option */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CSS login page */
+.login-body {
+    font-family: 'Calibri','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color:#EFF6F0; 
+    /* #f0f2f5; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: #EFF6F0; /* Light gray background */
+}
+
+.login-box {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    width: 800px;
+    max-width: 90%;
+    overflow: hidden;
+    flex-direction: row; /* Default to row layout */
+}
+
+.login-left,
+.login-right {
+    padding: 40px;
+}
+
+.login-left {
+    background-color: #f7f7f7;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-right {
+    flex: 1;
+    background-color: #ffffff;
+    text-align: center;
+}
+.login-right h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #3A5347; /* Dark green color */
+}
+
+.logo {
+    margin-bottom: 20px;
+    width: 150px; /* Increase the width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #3A5347; /* Dark green color */
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    color: #333;
+}
+
+.oauth-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.oauth {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.oauth i {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.oauth.google {
+    background-color: #db4437;
+}
+
+.oauth.google:hover {
+    background-color: #c23321;
+}
+
+.oauth.microsoft {
+    background-color: #2b579a;
+}
+
+.oauth.microsoft:hover {
+    background-color: #1a468c;
+}
+
+.oauth.linkedin {
+    background-color: #0077b5;
+}
+
+.oauth.linkedin:hover {
+    background-color: #005983;
+}
+
+.cookie-notice {
+    font-size: 12px;
+    color: #888;
+    margin-top: 20px;
+}
+.signup-link {
+    font-size: 14px;
+    color: #3A5347; /* Dark green color */
+}
+
+.signup-link a {
+    color: #3A5347; /* Dark green color */
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+    .login-box {
+        flex-direction: column; /* Stack the boxes vertically */
+        width: 100%; /* Full width on mobile */
+        height: auto; /* Adjust height to content */
+    }
+
+    .login-left,
+    .login-right {
+        padding: 20px; /* Reduce padding on mobile */
+    }
+
+    .logo {
+        width: 100px; /* Adjust logo size on mobile */
+    }
+
+    .login-right h3 {
+        font-size: 20px; /* Adjust heading size on mobile */
+    }
+
+    .form-group input {
+        font-size: 14px; /* Adjust input font size on mobile */
+    }
+
+    .header__logout-button {
+        font-size: 14px; /* Adjust button font size on mobile */
+        padding: 8px 16px; /* Adjust button padding on mobile */
     }
 }

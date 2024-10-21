@@ -22,12 +22,16 @@ const {fetchPowerBIEmbedInfo,reportsList} = require('../config/powerbiEmbed-setu
 
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
+        const userRights =  req.user.userRights || req.session.userRights ||  null;
         const accessCode = req.user.accessCode || req.session.accessCode || null;
-        if (accessCode) {
+
+
+        if (accessCode && userRights !== null) {
             // Add reportsList to the rendered dashboard
             res.render('dashboard', { 
                 title: 'GreenSide', 
                 accessCode: JSON.stringify(accessCode),
+                userRights: userRights,
                 reports: reportsList  // Pass reportsList to the template
             });
         } else {

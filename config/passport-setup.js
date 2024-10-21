@@ -17,7 +17,9 @@ passport.use(new GoogleStrategy({
   (accessToken, refreshToken, profile, done) => {
     let user = {
       id: profile.id,
-      provider: 'Google'
+      provider: 'Google',
+      providerUsername: profile._json.name,
+      providerEmail:profile._json.email
     };
     return done(null, user);
   }
@@ -27,12 +29,14 @@ passport.use(new LinkedInStrategy({
     clientID: process.env.LINKEDIN_CLIENT_ID,
     clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
     callbackURL: "/auth/linkedin/callback",
-    scope: ['profile','openid']
+    scope: ['profile','openid','email']
   },
   (accessToken, refreshToken, profile, done) => {
     let user = {
       id: profile.id,
-      provider: 'LinkedIn'
+      provider: 'LinkedIn',
+      providerUsername: profile._json.name,
+      providerEmail:profile._json.email
     };
     return done(null, user);
   }

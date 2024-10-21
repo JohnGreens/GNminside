@@ -1,320 +1,3 @@
-//------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Main page elements and functions ---------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-// // Function to toggle the sidebar menu open or closed
-// function toggleSidebar() {
-//     const sidebarElement = document.getElementById('sidebar');
-//     sidebarElement.classList.toggle('active');
-//     // console.log('Sidebar toggled. Active state:', sidebarElement.classList.contains('active'));  // Debugging log
-// }
-
-
-
-// // Function to save the last accessed report ID in localStorage
-// function saveLastReportId(reportId) {
-//     localStorage.setItem('lastReportId', reportId);
-// }
-
-
-// window.saveLastReportId = saveLastReportId;
-
-// //------------------------------------------------------------------------------------------------------------------------------------------------------------
-// //PowerBi rendering and functions --------------------------------------------------------------------------------------------------------------------------
-
-// // Initialize the Power BI service
-// const powerBIService = new window['powerbi-client'].service.Service(
-//     window['powerbi-client'].factories.hpmFactory, 
-//     window['powerbi-client'].factories.wpmpFactory, 
-//     window['powerbi-client'].factories.routerFactory
-// );
-
-// const reportContainerElement = document.getElementById('reportContainer');
-// let reportInstance;
-// let currentReportPageName = null;
-
-// // Function to embed a Power BI report with the given filters
-// function embedReport(reportId, projectFilterValues = []) {
-//     // Default to all projects and OUIDs if no specific filters are provided
-//     if (!projectFilterValues || projectFilterValues.length === 0) {
-//         projectFilterValues = getProjectAccessDetails().map(project => project.projectID);
-//     }
-
-//     // Extract the OUIDs from projectAccessDetails
-//     const ouidFilterValues = getProjectAccessDetails().map(project => project.orgID);
-
-//     // Clear previous instance before embedding
-//     powerBIService.reset(reportContainerElement);
-
-//     fetch(`/embed-info/${reportId}`)
-//         .then(response => response.json())
-//         .then(embedInfo => {
-//             // Extract the selected date range from the Flatpickr date picker
-//             const dateRangePicker = document.getElementById('monthYearRangePicker')._flatpickr;
-//             const selectedDates = dateRangePicker.selectedDates;
-
-//             // Format the start and end dates to the start and end of the selected months
-//             let startDate = "2023-05-01T00:00:00Z"; // Default start date
-//             let endDate = "2024-01-01T00:00:00Z"; // Default end date
-
-//             if (selectedDates.length === 2) {
-//                 const start = selectedDates[0];
-//                 const end = selectedDates[1];
-
-//                 startDate = new Date(start.getFullYear(), start.getMonth(), 1).toISOString();
-//                 endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59).toISOString();
-//             }
-
-//             const filters = [
-//                 {
-//                     $schema: "http://powerbi.com/product/schema#basic",
-//                     target: {
-//                         table: "Min Side IDs",
-//                         column: "ProjectID"
-//                     },
-//                     operator: "In",
-//                     values: projectFilterValues.map(Number)  // Ensure filter values are numbers
-//                 },
-//                 {
-//                     $schema: "http://powerbi.com/product/schema#basic",
-//                     target: {
-//                         table: "Organization_OrgUnit",
-//                         column: "OrgUnitID"
-//                     },
-//                     operator: "In",
-//                     values: ouidFilterValues.filter(id => id !== null)
-//                 },
-//                 {
-//                     $schema: "https://powerbi.com/product/schema#advanced",
-//                     target: {
-//                         table: "Min Side Period",
-//                         column: "DateTime"
-//                     },
-//                     logicalOperator: "And",
-//                     conditions: [
-//                         {
-//                             operator: "LessThan",
-//                             value: endDate  // ISO 8601 format for the upper bound
-//                         },
-//                         {
-//                             operator: "GreaterThan",
-//                             value: startDate  // ISO 8601 format for the lower bound
-//                         }
-//                     ]
-//                 }
-//             ];
-
-//             const reportConfig = {
-//                 type: 'report',
-//                 tokenType: window['powerbi-client'].models.TokenType.Embed,
-//                 accessToken: embedInfo.embedToken,
-//                 embedUrl: embedInfo.embedUrl,
-//                 id: embedInfo.reportId,
-//                 filters: filters,
-//                 settings: {
-//                     filterPaneEnabled: true,
-//                     navContentPaneEnabled: false,
-//                     layoutType: 3
-//                 }
-//             };
-
-//             // Embed the report
-//             reportInstance = powerBIService.embed(reportContainerElement, reportConfig);
-//         })
-//         .catch(error => {
-//             console.error('Error loading report:', error);
-//         });
-// }
-
-// // Function to update filters without re-rendering the report
-// async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
-//     // Extract the selected date range from the Flatpickr date picker
-//     const dateRangePicker = document.getElementById('monthYearRangePicker')._flatpickr;
-//     const selectedDates = dateRangePicker.selectedDates;
-
-//     // Format the start and end dates to the start and end of the selected months
-//     let startDate = "2023-05-01T00:00:00Z"; // Default start date
-//     let endDate = "2024-01-01T00:00:00Z"; // Default end date
-
-//     if (selectedDates.length === 2) {
-//         const start = selectedDates[0];
-//         const end = selectedDates[1];
-
-//         startDate = new Date(start.getFullYear(), start.getMonth(), 1).toISOString();
-//         endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59).toISOString();
-//     }
-
-//     // Check if no selections were made
-//     if (!selectedProjectIds || selectedProjectIds.length === 0) {
-//         selectedProjectIds = getProjectAccessDetails()
-//             .map(project => project.projectID)
-//             .filter(id => id !== null && id !== undefined && !isNaN(id));  // Filter out invalid project IDs
-//     }
-
-//     if (!selectedOUIDs || selectedOUIDs.length === 0) {
-//         selectedOUIDs = getProjectAccessDetails()
-//             .map(project => project.orgID)
-//             .filter(id => id !== null && id !== undefined && !isNaN(id));  // Filter out invalid OUIDs
-//     }
-
-//     if (reportInstance) {
-//         try {
-//             const filters = [
-//                 {
-//                     $schema: "http://powerbi.com/product/schema#basic",
-//                     target: {
-//                         table: "Min Side IDs",
-//                         column: "ProjectID"
-//                     },
-//                     operator: "In",
-//                     values: selectedProjectIds.map(Number)  // Ensure valid project IDs as numbers
-//                 },
-//                 {
-//                     $schema: "http://powerbi.com/product/schema#basic",
-//                     target: {
-//                         table: "Organization_OrgUnit",
-//                         column: "OrgUnitID"
-//                     },
-//                     operator: "In",
-//                     values: selectedOUIDs  // Ensure valid OUIDs
-//                 },
-//                 {
-//                     $schema: "https://powerbi.com/product/schema#advanced",
-//                     target: {
-//                         table: "Min Side Period",
-//                         column: "DateTime"
-//                     },
-//                     logicalOperator: "And",
-//                     conditions: [
-//                         {
-//                             operator: "LessThan",
-//                             value: endDate  // ISO 8601 format for the upper bound
-//                         },
-//                         {
-//                             operator: "GreaterThan",
-//                             value: startDate  // ISO 8601 format for the lower bound
-//                         }
-//                     ]
-//                 }
-//             ];
-
-//             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
-//         } catch (error) {
-//             console.error('Error updating filters:', error);
-//         }
-//     } else {
-//         console.warn('Report instance is not available.');
-//     }
-// }
-
-// // Adjust report container dimensions
-// function adjustReportContainerDimensions() {
-//     reportContainerElement.style.height = 'calc(100vh - 20px)';
-//     reportContainerElement.style.padding = '0';
-//     reportContainerElement.style.margin = '0';
-// }
-
-// //------------------------------------------------------------------------------------------------------------------------------------------------------------
-// //Mainpage working with Powerbi functions ---------------------------------------------------------------------------------------------------------------------------
-
-// // Initialize Select2 for the project dropdown
-// function initializeProjectSelect() {
-//     $('#projectFilterSelect').select2({
-//         placeholder: 'Søk og velg prosjekter',
-//         allowClear: true,
-//         width: '100%'
-//     });
-// }
-
-// // Populate the project dropdown with project names
-// function populateProjectFilterDropdown(accessDetails) {
-//     const projectDropdown = document.getElementById('projectFilterSelect');
-//     projectDropdown.innerHTML = ''; // Clear existing options
-
-//     accessDetails.forEach(project => {
-//         const option = document.createElement('option');
-//         option.value = project.projectID;
-//         option.text = project.name;
-//         projectDropdown.appendChild(option);
-//     });
-// }
-
-// // Function to apply the selected project filters
-// function applyProjectFilter() {
-//     const selectedProjectIds = $('#projectFilterSelect').val() || []; // Get selected project IDs
-
-//     // Filter out any invalid or 'null' project IDs and NaN values
-//     const validProjectIds = selectedProjectIds.filter(id => id !== 'null' && id !== null && id !== undefined && !isNaN(id));
-
-//     // console.log('applyProjectFilter called. Valid Selected Project IDs:', validProjectIds);
-
-//     // Filter projects by selected project IDs and extract corresponding OUIDs
-//     const selectedOUIDs = getProjectAccessDetails()
-//         .filter(project => validProjectIds.includes(project.projectID ? project.projectID.toString() : null))
-//         .map(project => project.orgID)
-//         .filter(id => id !== null && id !== undefined && id !== 'null' && !isNaN(id));
-
-//     if (reportInstance) {
-//         reportInstance.getActivePage().then(page => {
-//             currentReportPageName = page.name;
-//             updateReportFilters(validProjectIds, selectedOUIDs);
-//         }).catch(error => {
-//             console.error('Error getting current page:', error);
-//         });
-//     } else {
-//         embedReport('196ff37e-8fba-445d-81bc-bbc4db1b0574', validProjectIds, selectedOUIDs);
-//     }
-// }
-
-// // Function to get the current project filter value from the dropdown
-// function getCurrentProjectFilterValue() {
-//     const projectDropdown = document.getElementById('projectFilterSelect');
-//     return [projectDropdown.value];
-// }
-
-// // Function to save the last accessed report ID
-// function saveLastReportId(reportId) {
-//     localStorage.setItem('lastReportId', reportId);
-// }
-
-// // Function to return project access details
-// // projectAccessDetails is beeing returned at the dashboard.hbs and through the routes
-// function getProjectAccessDetails() {
-//     return Array.isArray(projectAccessDetails) ? projectAccessDetails : [];
-// }
-
-// // Initialize the application on window load
-// window.onload = function() {
-//     fetch('/config')
-//         .then(response => response.json())
-//         .then(config => {
-//             const REPORT_1_ID = config.report1Id;
-
-//             const lastReportId = localStorage.getItem('lastReportId') || REPORT_1_ID;
-//             embedReport(lastReportId, []);
-
-//             const accessDetails = getProjectAccessDetails(); 
-//             populateProjectFilterDropdown(accessDetails);
-//             initializeProjectSelect();
-
-//             $('#projectFilterSelect').on('change', applyProjectFilter);
-//         })
-//         .catch(error => {
-//             console.error('Error fetching REPORT_1_ID from server:', error);
-//         });
-// }
-
-// // Make functions available globally
-// // window.toggleSidebar = toggleSidebar;
-// // window.applyProjectFilter = applyProjectFilter;
-// // window.saveLastReportId = saveLastReportId;
-// // window.embedReport = embedReport;
-// // window.updateReportFilters = updateReportFilters;
-// // window.applyProjectFilter = applyProjectFilter;
-// // window.getProjectAccessDetails = getProjectAccessDetails
-// // window.getCurrentProjectFilterValue = getCurrentProjectFilterValue;
-
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Main page elements and functions ---------------------------------------------------------------------------------------------------------------------------
@@ -324,6 +7,13 @@
 function toggleSidebar() {
     const sidebarElement = document.getElementById('sidebar');
     sidebarElement.classList.toggle('active');
+}
+
+// // Adjust report container dimensions
+function adjustReportContainerDimensions() {
+    reportContainerElement.style.height = 'calc(100vh - 20px)';
+    reportContainerElement.style.padding = '0';
+    reportContainerElement.style.margin = '0';
 }
 
 // Function to save the last accessed report ID in localStorage
@@ -342,7 +32,7 @@ async function fetchAndPopulateReports() {
 
         reports.forEach(report => {
             const menuItemElement = document.createElement('li');
-            menuItemElement.classList.add('sidebar__menu-item');
+            menuItemElement.classList.add('sidebar__reportmenu-item');
             menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${report.name}</a>`;
             reportMenuElement.appendChild(menuItemElement);
         });
@@ -366,17 +56,34 @@ const reportContainerElement = document.getElementById('reportContainer');
 let reportInstance;
 let currentReportPageName = null;
 
-// Function to embed a Power BI report with the given filters
-async function embedReport(reportId, projectFilterValues = []) {
+//, projectFilterValues = [], ouidFilterValues = []
+async function embedReport(reportId) {
+    console.log("embedReport")
     try {
-        // Default to all projects and OUIDs if no specific filters are provided
-        if (!projectFilterValues || projectFilterValues.length === 0) {
-            projectFilterValues = getProjectAccessDetails().map(project => project.projectID);
-        }
+        let projectFilterValues = []
+        let ouidFilterValues = []
+        const selectedOptions = $('#projectFilterSelect').val() || []; // Get selected options
+        selectedOptions.forEach(option => {
+            const parsedOption = JSON.parse(option);
+            projectFilterValues = projectFilterValues.concat(parsedOption.projectIDs);
+            ouidFilterValues = ouidFilterValues.concat(parsedOption.orgIDs);
+        });
 
-        // Extract the OUIDs from projectAccessDetails
-        const ouidFilterValues = getProjectAccessDetails().map(project => project.orgID);
-
+        if ((!projectFilterValues || projectFilterValues.length === 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
+            projectFilterValues = getProjectAccessDetails()
+                .map(project => project.projectIDs)
+                .filter(projectIDs => projectIDs && projectIDs.length > 0)
+                .flat();
+            ouidFilterValues = getProjectAccessDetails()
+                .map(project => project.orgIDs)
+                .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
+                .flat();  // Flatten the nested arrays into a single array
+        } else if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
+            ouidFilterValues = ['empy9999999999999']
+        } else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
+            projectFilterValues = [9999999999999]
+        } 
+        
         // Clear previous instance before embedding
         powerBIService.reset(reportContainerElement);
 
@@ -388,8 +95,8 @@ async function embedReport(reportId, projectFilterValues = []) {
         const selectedDates = dateRangePicker.selectedDates;
 
         // Format the start and end dates to the start and end of the selected months
-        let startDate = "2023-05-01T00:00:00Z"; // Default start date
-        let endDate = "2024-01-01T00:00:00Z"; // Default end date
+        let startDate = "2022-01-01T00:00:00Z"; // Default start date
+        let endDate = "2024-06-01T00:00:00Z"; // Default end date
 
         if (selectedDates.length === 2) {
             const start = selectedDates[0];
@@ -398,7 +105,6 @@ async function embedReport(reportId, projectFilterValues = []) {
             startDate = new Date(start.getFullYear(), start.getMonth(), 1).toISOString();
             endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59).toISOString();
         }
-
         const filters = [
             {
                 $schema: "http://powerbi.com/product/schema#basic",
@@ -407,16 +113,16 @@ async function embedReport(reportId, projectFilterValues = []) {
                     column: "ProjectID"
                 },
                 operator: "In",
-                values: projectFilterValues.map(Number)  // Ensure filter values are numbers
+                values: projectFilterValues
             },
             {
                 $schema: "http://powerbi.com/product/schema#basic",
                 target: {
-                    table: "Organization_OrgUnit",
+                    table: "Min Side IDs",
                     column: "OrgUnitID"
                 },
                 operator: "In",
-                values: ouidFilterValues.filter(id => id !== null)
+                values: ouidFilterValues
             },
             {
                 $schema: "https://powerbi.com/product/schema#advanced",
@@ -428,16 +134,19 @@ async function embedReport(reportId, projectFilterValues = []) {
                 conditions: [
                     {
                         operator: "LessThan",
-                        value: endDate  // ISO 8601 format for the upper bound
+                        value: endDate  
                     },
                     {
                         operator: "GreaterThan",
-                        value: startDate  // ISO 8601 format for the lower bound
+                        value: startDate  
                     }
                 ]
             }
         ];
-
+        let filterPaneEnabledStatus = false
+        if (projectAccessUserRights == 'admin'){
+            filterPaneEnabledStatus = true
+        }
         const reportConfig = {
             type: 'report',
             tokenType: window['powerbi-client'].models.TokenType.Embed,
@@ -446,29 +155,39 @@ async function embedReport(reportId, projectFilterValues = []) {
             id: embedInfo.reportId,
             filters: filters,
             settings: {
-                filterPaneEnabled: true,
+                filterPaneEnabled: filterPaneEnabledStatus,
                 navContentPaneEnabled: false,
-                layoutType: 3
+                layoutType: 1 //3
+                // Widescreen = 0	
+                // Standard = 1	
+                // Cortana = 2	
+                // Letter = 3	
+                // Custom = 4	
+                // Mobile = 5
             }
         };
 
+
         // Embed the report
+       
         reportInstance = powerBIService.embed(reportContainerElement, reportConfig);
+
     } catch (error) {
         console.error('Error loading report:', error);
     }
 }
 
-// Function to update filters without re-rendering the report
+
 async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
+    console.log("updateReportFilters")
     try {
         // Extract the selected date range from the Flatpickr date picker
         const dateRangePicker = document.getElementById('monthYearRangePicker')._flatpickr;
         const selectedDates = dateRangePicker.selectedDates;
 
         // Format the start and end dates to the start and end of the selected months
-        let startDate = "2023-05-01T00:00:00Z"; // Default start date
-        let endDate = "2024-01-01T00:00:00Z"; // Default end date
+        let startDate = "2023-01-01T00:00:00Z"; // Default start date
+        let endDate = "2024-06-01T00:00:00Z"; // Default end date
 
         if (selectedDates.length === 2) {
             const start = selectedDates[0];
@@ -478,18 +197,23 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
             endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59).toISOString();
         }
 
-        // Check if no selections were made
-        if (!selectedProjectIds || selectedProjectIds.length === 0) {
+        // No filtering is selected so all available ids is passed to the powerbi filter
+        if ((!selectedProjectIds || selectedProjectIds.length === 0)&&(!selectedOUIDs || selectedOUIDs.length === 0)) {
             selectedProjectIds = getProjectAccessDetails()
-                .map(project => project.projectID)
-                .filter(id => id !== null && id !== undefined && !isNaN(id));  // Filter out invalid project IDs
-        }
-
-        if (!selectedOUIDs || selectedOUIDs.length === 0) {
+                .map(project => project.projectIDs)
+                .filter(projectIDs => projectIDs && projectIDs.length > 0)
+                .flat();
             selectedOUIDs = getProjectAccessDetails()
-                .map(project => project.orgID)
-                .filter(id => id !== null && id !== undefined && !isNaN(id));  // Filter out invalid OUIDs
-        }
+                .map(project => project.orgIDs)
+                .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
+                .flat();  // Flatten the nested arrays into a single array
+        } 
+        else if ((selectedProjectIds && selectedProjectIds.length >= 0)&&(!selectedOUIDs || selectedOUIDs.length === 0)) {
+            selectedOUIDs = ['empy9999999999999']
+        } else if ((selectedOUIDs && selectedOUIDs.length >= 0)&&(!selectedProjectIds || selectedProjectIds.length === 0)) {
+            selectedProjectIds = [9999999999999]
+        } 
+
 
         if (reportInstance) {
             const filters = [
@@ -500,12 +224,12 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                         column: "ProjectID"
                     },
                     operator: "In",
-                    values: selectedProjectIds.map(Number)  // Ensure valid project IDs as numbers
+                    values: selectedProjectIds  // Ensure filter values are numbers
                 },
                 {
                     $schema: "http://powerbi.com/product/schema#basic",
                     target: {
-                        table: "Organization_OrgUnit",
+                        table: "Min Side IDs",
                         column: "OrgUnitID"
                     },
                     operator: "In",
@@ -530,7 +254,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                     ]
                 }
             ];
-
+            // console.log("filter",filters)
             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
         } else {
             console.warn('Report instance is not available.');
@@ -539,7 +263,6 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
         console.error('Error updating filters:', error);
     }
 }
-
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Mainpage working with Powerbi functions ---------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -553,41 +276,102 @@ function initializeProjectSelect() {
     });
 }
 
-// Populate the project dropdown with project names
+
+// // Populate the project dropdown with project names
+// function populateProjectFilterDropdown(accessDetails) {
+//     const projectDropdown = document.getElementById('projectFilterSelect');
+//     projectDropdown.innerHTML = ''; // Clear existing options
+
+//     accessDetails.forEach(project => {
+//         const option = document.createElement('option');
+//         option.value = JSON.stringify({ projectIDs: project.projectIDs, orgIDs: project.orgIDs });
+//         if(project.projectIDs != "" && project.orgIDs!= ""){
+//             option.text = project.name
+//             option.text2= 'Eaas & Klima'
+//         }else if(project.projectIDs != "" && project.orgIDs == ""){
+//             option.text = project.name + ' kun Eaas'
+//             option.text2= 'Eaas'
+//         }else if(!project.projectIDs == "" && project.orgIDs != "") {
+//             option.text = project.name + ' kun Klima'
+//             option.text2= 'Klima'
+//         }else{
+//             option.text = project.name  + ' Ukjent';
+//         }
+//         // option.text = project.name;
+//         projectDropdown.appendChild(option);
+//     });
+// }
+// Populate the project dropdown with project names grouped by category
 function populateProjectFilterDropdown(accessDetails) {
     const projectDropdown = document.getElementById('projectFilterSelect');
     projectDropdown.innerHTML = ''; // Clear existing options
 
+    // Group projects by category
+    const groupedProjects = {
+        'Eaas & Klima': [],
+        'Eaas': [],
+        'Klima': [],
+        'Other': []
+    };
+
     accessDetails.forEach(project => {
-        const option = document.createElement('option');
-        option.value = project.projectID;
-        option.text = project.name;
-        projectDropdown.appendChild(option);
+        if (project.projectIDs != "" && project.orgIDs!= "") {
+            groupedProjects['Eaas & Klima'].push(project);
+        } else if (project.projectIDs != "" && project.orgIDs == "") {
+            groupedProjects['Eaas'].push(project);
+        } else if (!project.projectIDs == "" && project.orgIDs != "") {
+            groupedProjects['Klima'].push(project);
+        } else {
+            groupedProjects['Other'].push(project);
+        }
+    });
+
+    // Create optgroups and append options
+    Object.keys(groupedProjects).forEach(category => {
+        if (groupedProjects[category].length > 0) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = category;
+
+            groupedProjects[category].forEach(project => {
+                const option = document.createElement('option');
+                option.value = JSON.stringify({ projectIDs: project.projectIDs, orgIDs: project.orgIDs });
+                option.text = project.name;
+                optgroup.appendChild(option);
+            });
+
+            projectDropdown.appendChild(optgroup);
+        }
     });
 }
 
+
 // Function to apply the selected project filters
 function applyProjectFilter() {
-    const selectedProjectIds = $('#projectFilterSelect').val() || []; // Get selected project IDs
+    const selectedOptions = $('#projectFilterSelect').val() || []; // Get selected options
 
-    // Filter out any invalid or 'null' project IDs and NaN values
-    const validProjectIds = selectedProjectIds.filter(id => id !== 'null' && id !== null && id !== undefined && !isNaN(id));
+    let selectedProjectIds = [];
+    let selectedOUIDs = [];
 
-    // Filter projects by selected project IDs and extract corresponding OUIDs
-    const selectedOUIDs = getProjectAccessDetails()
-        .filter(project => validProjectIds.includes(project.projectID ? project.projectID.toString() : null))
-        .map(project => project.orgID)
-        .filter(id => id !== null && id !== undefined && id !== 'null' && !isNaN(id));
+    selectedOptions.forEach(option => {
+        const parsedOption = JSON.parse(option);
+        selectedProjectIds = selectedProjectIds.concat(parsedOption.projectIDs);
+        selectedOUIDs = selectedOUIDs.concat(parsedOption.orgIDs);
+    });
+
+    // Remove duplicates
+    selectedProjectIds = [...new Set(selectedProjectIds)];
+    selectedOUIDs = [...new Set(selectedOUIDs)];
+
 
     if (reportInstance) {
         reportInstance.getActivePage().then(page => {
             currentReportPageName = page.name;
-            updateReportFilters(validProjectIds, selectedOUIDs);
+            updateReportFilters(selectedProjectIds, selectedOUIDs);
         }).catch(error => {
             console.error('Error getting current page:', error);
         });
     } else {
-        embedReport('196ff37e-8fba-445d-81bc-bbc4db1b0574', validProjectIds, selectedOUIDs);
+        embedReport('196ff37e-8fba-445d-81bc-bbc4db1b0574', selectedProjectIds, selectedOUIDs);
     }
 }
 
@@ -598,13 +382,14 @@ function getCurrentProjectFilterValue() {
 }
 
 // Function to return project access details
-// projectAccessDetails is beeing returned at the dashboard.hbs and through the routes
+// projectAccessDetails is beeing returned at the dashboard.hbs and through the routes,
 function getProjectAccessDetails() {
     return Array.isArray(projectAccessDetails) ? projectAccessDetails : [];
-}
+    }
 
 // Initialize the application on window load
 window.onload = function() {
+    console.log("window.onload")
     fetch('/config')
         .then(response => response.json())
         .then(config => {
@@ -614,7 +399,7 @@ window.onload = function() {
             fetchAndPopulateReports();
 
             const lastReportId = localStorage.getItem('lastReportId') || REPORT_1_ID;
-            embedReport(lastReportId, []);
+            embedReport(lastReportId);
 
             const accessDetails = getProjectAccessDetails(); 
             populateProjectFilterDropdown(accessDetails);

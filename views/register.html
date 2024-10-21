@@ -11,19 +11,47 @@
 <body>
     <div class="login-container">
         <div class="login-box">
-            
             <div class="login-right">
                 <h3>Registrer deg:</h3>
-          
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="fornavn">Fornavn</label>
+                        <input type="text" id="fornavn" name="fornavn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="etternavn">Etternavn</label>
+                        <input type="text" id="etternavn" name="etternavn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefon">Telefon nummer</label>
+                        <input type="tel" id="telefon" name="telefon" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-post</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="organisasjon">Organisasjon</label>
+                        <input type="text" id="organisasjon" name="organisasjon" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rolle">Rolle</label>
+                        <input type="text" id="rolle" name="rolle" required>
+                    </div>
+                    <button type="submit" class="header__logout-button">Registrer deg</button>
+                </form>
+                <form action="/logout" method="post">
+                    <button type="submit" class="header__logout-button">Logg ut</button>
+                </form>
                 <p class="cookie-notice">Informasjonskapsler må være aktivert i nettleseren din</p>
             </div>
             <div class="login-left">
-              <img src="logo.png" alt="Maker Logo" class="logo">
-              <p class="signup-link">Har du noen spørsmål? <a href="https://greennorway.no">Kontakt oss</a></p>
-              
-          </div>
+                <img src="logo.png" alt="Maker Logo" class="logo">
+                <p class="signup-link">Har du noen spørsmål? <a href="https://greennorway.no">Kontakt oss</a></p>
+            </div>
         </div>
     </div>
+
+    <script src="/js/register.js"></script>
 </body>
 </html>
-
