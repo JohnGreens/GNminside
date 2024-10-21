@@ -1,5 +1,3 @@
-
-
 const axios = require('axios');
 
 // Function to merge project and organization data

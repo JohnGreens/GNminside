@@ -84,9 +84,10 @@ router.get('/azuread/callback', async (req, res, next) => {
             providerUsername: response.account.name,
             providerEmail:response.account.username
         }
-
+        console.log("before GetAccessID")
         const apiResponse = await GetAccessID(user.id);
         if (apiResponse.accessCode && apiResponse.userData.accesscheck==true) {
+            console.log("inside GetAccessID")
             // Attach accessCode and userData to user object
             user.accessCode = apiResponse.accessCode;
             user.userData = apiResponse.userData;
