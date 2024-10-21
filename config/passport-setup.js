@@ -6,7 +6,7 @@ const { ConfidentialClientApplication } = require('@azure/msal-node');
 const msalConfig = require('./msalConfig');
 const pca = new ConfidentialClientApplication(msalConfig);
 const CustomStrategy = require('passport-custom').Strategy;
-require('dotenv').config();
+// require('dotenv').config();
 
 
 passport.use(new GoogleStrategy({

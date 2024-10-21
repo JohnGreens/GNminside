@@ -6,7 +6,7 @@ const passport = require('passport')
 const authRoutes = require('./routes/auth');
 const indexRoutes = require('./routes/index');
 const handlebars = require('handlebars'); // Explicitly require handlebars
-require('dotenv').config();
+// require('dotenv').config();
 
 
 const app = express();
@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'espenErBest,Litt selvgod må man være',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: true, maxAge: 24 * 60 * 60 * 1000 }
