@@ -93,8 +93,10 @@ router.get('/azuread/callback', async (req, res, next) => {
             // console.log("userData routhe /auth",user.userData.userInfo)
             user.userRights=user.userData.userInfo.userRights
             // Log the user in with Passport, storing the accessCode in the session
+            console.log(user)
             req.login(user, function(err) {
                 if (err) { return next(err); }
+                console.log("redirect user to /")
                 return res.redirect('/');  // Redirect to home/dashboard
             });
         } else {
