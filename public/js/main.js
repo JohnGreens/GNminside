@@ -143,6 +143,7 @@ async function embedReport(reportId) {
                 ]
             }
         ];
+        console.log("filter",filters)
         let filterPaneEnabledStatus = false
         if (projectAccessUserRights == 'admin'){
             filterPaneEnabledStatus = true
@@ -254,7 +255,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                     ]
                 }
             ];
-            // console.log("filter",filters)
+            console.log("filter",filters)
             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
         } else {
             console.warn('Report instance is not available.');
