@@ -12,6 +12,7 @@ const handlebars = require('handlebars'); // Explicitly require handlebars
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 app.engine('hbs', exphbs.engine({ extname: '.hbs', defaultLayout: 'main', helpers: {
     safe: function (object) {
         return new handlebars.SafeString(JSON.stringify(object));
@@ -21,7 +22,7 @@ app.engine('hbs', exphbs.engine({ extname: '.hbs', defaultLayout: 'main', helper
 app.set('view engine', 'hbs');
 
 app.set('views', './views');  // Ensure views directory is set correctly
-
+app.set('trust proxy', 1);  // 1 means trust the first proxy (which is the Azure proxy)
 // Middleware to parse JSON bodies
 app.use(express.json());
 
