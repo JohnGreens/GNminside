@@ -182,10 +182,11 @@ async function embedReport(reportId) {
 async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
     console.log("updateReportFilters")
     try {
+        console.log("test updatereportfilter0")
         // Extract the selected date range from the Flatpickr date picker
         const dateRangePicker = document.getElementById('monthYearRangePicker')._flatpickr;
         const selectedDates = dateRangePicker.selectedDates;
-
+        console.log("test updatereportfilter1")
         // Format the start and end dates to the start and end of the selected months
         let startDate = "2023-01-01T00:00:00Z"; // Default start date
         let endDate = "2024-06-01T00:00:00Z"; // Default end date
@@ -197,7 +198,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
             startDate = new Date(start.getFullYear(), start.getMonth(), 1).toISOString();
             endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59).toISOString();
         }
-
+        console.log("test updatereportfilter2")
         // No filtering is selected so all available ids is passed to the powerbi filter
         if ((!selectedProjectIds || selectedProjectIds.length === 0)&&(!selectedOUIDs || selectedOUIDs.length === 0)) {
             selectedProjectIds = getProjectAccessDetails()
@@ -214,9 +215,10 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
         } else if ((selectedOUIDs && selectedOUIDs.length >= 0)&&(!selectedProjectIds || selectedProjectIds.length === 0)) {
             selectedProjectIds = [9999999999999]
         } 
-
+        console.log("test updatereportfilter3")
 
         if (reportInstance) {
+            console.log("test updatereportfilter4")
             const filters = [
                 {
                     $schema: "http://powerbi.com/product/schema#basic",
