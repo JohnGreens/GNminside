@@ -64,7 +64,7 @@ const reportsList = [];
 for (let i = 1; i <= numberOfReports; i++) {
     reportsList.push({
         id: process.env[`REPORT_${i}_ID`],
-        name: process.env[`REPORT_${i}_NAME`],
+        name: decodeURIComponent(process.env[`REPORT_${i}_NAME`]),
         icon: process.env[`REPORT_${i}_ICON`]
     });
 }

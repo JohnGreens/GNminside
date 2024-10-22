@@ -33,7 +33,7 @@ async function fetchAndPopulateReports() {
         reports.forEach(report => {
             const menuItemElement = document.createElement('li');
             menuItemElement.classList.add('sidebar__reportmenu-item');
-            menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${decodeURIComponent(report.name)}</a>`;
+            menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${report.name}</a>`;
             reportMenuElement.appendChild(menuItemElement);
         });
     } catch (error) {
