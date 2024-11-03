@@ -12,11 +12,11 @@ const {GetAccessID} = require('../config/accessID')
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), async (req, res) => {
-    const AuthID = req.user.id; // Assuming you're using the user's ID from LinkedIn as AuthID
+    const AuthID = req.user.id; 
     try {
         const apiResponse = await GetAccessID(AuthID);
         if (apiResponse.accessCode && apiResponse.userData.accesscheck) {
-            req.session.accessCode = apiResponse.accessCode; // or res.cookie('accessCode', accessCode, { httpOnly: true });
+            req.session.accessCode = apiResponse.accessCode; 
             req.session.userRights = apiResponse.userData.userInfo.userRights
             res.redirect('/');
         } else {
@@ -89,13 +89,15 @@ router.get('/azuread/callback', async (req, res, next) => {
             // Attach accessCode and userData to user object
             user.accessCode = apiResponse.accessCode;
             user.userData = apiResponse.userData;
-            // console.log("userData routhe /auth",user.userData.userInfo)
+
+            //Ukjent test
+            // req.session.accessCode = user.accessCode;
+            // req.session.userRights = user.userData.userInfo.userRights
+
             user.userRights=user.userData.userInfo.userRights
             // Log the user in with Passport, storing the accessCode in the session
-            console.log(user)
             req.login(user, function(err) {
                 if (err) { return next(err); }
-                console.log("redirect user to /")
                 return res.redirect('/');  // Redirect to home/dashboard
             });
         } else {
@@ -114,7 +116,6 @@ router.get('/azuread/callback', async (req, res, next) => {
 // Endpoint to provide auth info
 router.get('/api/auth-info', (req, res) => {
     if (req.isAuthenticated()) {
-        console.log("isAuthenticated",req.user)
         const authID = req.user.id; // Assuming the authID is stored in req.user.id
         const authProvider = req.user.provider; // Assuming the authProvider is stored in req.user.provider
         const authProviderUsername = req.user.providerUsername; // Assuming the authProvider is stored in req.user.provider
@@ -122,7 +123,6 @@ router.get('/api/auth-info', (req, res) => {
         res.json({ authID, authProvider, authProviderUsername, authProviderEmail});
     } else {
         res.status(401).json({ message: 'Not authenticated' });
-        console.log(req)
     }
 });
 
@@ -143,21 +143,14 @@ router.post('/api/register', async (req, res) => {
             Role:rolle,
             AuthEmail:authProviderEmail,
             AuthName:authProviderUsername
-
         });
         const data = response.data;
-        console.log(data)
-        
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({ message: 'Internal server error' });
-}
-
-
-
-
+    }
 });
 
 

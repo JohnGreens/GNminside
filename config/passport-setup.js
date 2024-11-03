@@ -1,7 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
-
 const { ConfidentialClientApplication } = require('@azure/msal-node');
 const msalConfig = require('./msalConfig');
 const pca = new ConfidentialClientApplication(msalConfig);
@@ -55,6 +54,7 @@ passport.use('azuread', new CustomStrategy((req, done) => {
             done(null, { url: authUrl });
         })
         .catch(error => {
+            console.log('Error getting Auth Code URL:', error);
             done(error);
         });
 }));
@@ -62,6 +62,7 @@ passport.use('azuread', new CustomStrategy((req, done) => {
 
 
 passport.serializeUser((user, done) => {
+    // console.log('Serializing user:', user);
     done(null, user);
 });
 
@@ -69,5 +70,4 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-// module.exports = passport;
 module.exports = pca;

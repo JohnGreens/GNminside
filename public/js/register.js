@@ -6,8 +6,8 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const rolle = document.getElementById('rolle').value;
     const telefon = document.getElementById('telefon').value;
     const email = document.getElementById('email').value;
+    const kommentar = document.getElementById('kommentar').value || null;
 
-  
     // Fetch authID and authProvider from the server
     const authResponse = await fetch('/auth/api/auth-info');
 
@@ -18,14 +18,15 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ fornavn, etternavn, organisasjon, rolle, telefon, authID, authProvider, email,authProviderUsername,authProviderEmail })
+        body: JSON.stringify({ fornavn, etternavn, organisasjon, rolle, telefon, authID, authProvider, email,authProviderUsername,authProviderEmail,kommentar })
     
     });
+    console.log(response)
     if (response.ok) {
-        alert('Registration successful!');
+        alert('Registering fullført du får beksjed når bruker er verifisert');
         window.location.href = '/login'; // Redirect to login page
     } else {
         const errorData = await response.json();
-        alert('Registration failed: ' + errorData.message);
+        alert('Registering feilet, login på nytt og forsøk igjen. Feilkode: ' + errorData.message);
     }
 });

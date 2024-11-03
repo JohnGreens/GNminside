@@ -4,7 +4,7 @@
 
 /* Global styles */
 body {
-    font-family: 'Calibri';/*,'Roboto', Arial, sans-serif;*/
+    font-family: 'Segoe UI','Arial';/*,'Roboto', Arial, sans-serif;*/
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -17,7 +17,7 @@ body {
 .header {
     width: 100%;
     height: 50px;
-    background-color: #3A5347; /* Primary dark green color */
+    background-color: #074223; /* Primary dark green color #3A5347*/
     display: flex;
     align-items: center;
     padding: 0 20px;
@@ -69,17 +69,17 @@ body {
 }
     */
 .header__logout-button {
-    background-color: #3A5347; 
+    background-color: #074223; 
     color: #e9e9e9; 
     
     margin: 5px;
     padding: 5px 15px; 
-    font-family: 'Calibri', sans-serif; 
+    font-family: 'Segoe UI','Arial'; 
     font-size: 16px; 
     cursor: pointer; 
     border-radius: 15px; 
     transition: all 0.3s; 
-    border: 1px solid #3A5347; 
+    border: 1px solid #074223; 
     
 }
 
@@ -109,7 +109,7 @@ body {
 /* Sidebar styles */
 .sidebar {
     width: 200px;
-    background-color: #e5ecef;
+    background-color: #e6eee5;
     padding: 15px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, visibility 0.3s ease;
@@ -133,7 +133,7 @@ body {
 
 .sidebar__reportmenu-item a {
     text-decoration: none;
-    color: #3A5347;
+    color: #074223;
     display: block;
     padding: 8px 12px;
     border-radius: 15px;
@@ -148,7 +148,7 @@ body {
 }
 
 .sidebar__reportmenu-item a:hover {
-    background-color: #3A5347;
+    background-color: #074223;
     color: white;
 }
 
@@ -171,7 +171,7 @@ body {
     margin-bottom: 3px;
     display: block;
     /* font-size: 20px; */
-    color: #3A5347;
+    color: #074223;
 }
 
 .sidebar__projectfilter-input {
@@ -188,8 +188,8 @@ body {
     padding: 10px 10px;
     border-radius: 5px;
     border: none;
-    background-color: #e5ecef;
-    color: #3A5347;
+    background-color: #e6eee5;
+    color: #074223;
     /* font-size: 200px; */
     width: 100%;
     box-sizing: border-box;
@@ -197,13 +197,13 @@ body {
 }
 
 .sidebar__projectfilter-select:hover{
-    background-color: #3A5347;
+    background-color: #074223;
     color: white;
 }
 
 .sidebar__projectfilter-select:focus{
     outline: none;
-    background-color: #3A5347;
+    background-color: #074223;
     color: white;
 }
 
@@ -219,19 +219,19 @@ body {
 
 .sidebar__contact-link {
     text-decoration: none;
-    color: #3A5347;
+    color: #074223;
     display: block;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 8px 15px;
+    border-radius: 15px;
     transition: all 0.3s;
     display: flex;
     align-items: center;
-    background-color: #e5ecef;
+    /* background-color: #e5ecef; */
     box-shadow: none;
 }
 
 .sidebar__contact-link:hover {
-    background-color: #3A5347;
+    background-color: #074223;
     color: white;
 }
 
@@ -332,6 +332,7 @@ body {
 
 .date-range-picker {
     background: #fff;
+    color: #074223;
     cursor: pointer;
     padding: 10px;
     border: 1px solid #ced4da;
@@ -377,28 +378,28 @@ body {
 
 /* Ensure Flatpickr uses the same font-family, color, and text size */
 .flatpickr-calendar {
-    font-family: 'Calibri';
+    font-family: 'Segoe UI','Arial';
     color: #333; /* Match the color used in the body */
     font-size: 16px; /* Adjust the font size as needed */
 }
 
 .flatpickr-input {
-    font-family: 'Calibri';
+    font-family: 'Segoe UI','Arial';
     color: #333; /* Match the color used in the body */
     font-size: 16px; /* Adjust the font size as needed */
 }
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
-    background-color: #3A5347 !important;
+    background-color: #074223 !important;
 }
 .flatpickr-monthSelect-month.selected, .flatpickr-monthSelect-month.startRange, .flatpickr-monthSelect-month.endRange{
-    background-color: #3A5347 !important;
-    border-color: #3A5347 !important;
+    background-color: #074223 !important;
+    border-color: #074223 !important;
 }
 
 /* Ensure Select2 elements use the same font-family, color, and text size */
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
-    font-family: 'Calibri';
+    font-family: 'Segoe UI','Arial';
     color: #333; /* Match the color used in the body */
     font-size: 16px; /* Adjust the font size as needed */
     background-color: #fff; /* White background */
@@ -409,7 +410,7 @@ body {
 }
 
 .select2-container .select2-search--inline .select2-search__field {
-    font-family: 'Calibri' !important;
+    font-family: 'Segoe UI','Arial' !important;
     color: #333 !important;
 }
 
@@ -418,21 +419,21 @@ body {
 .select2-container--default .select2-selection--multiple:hover,
 .select2-container--default .select2-selection--single:focus,
 .select2-container--default .select2-selection--multiple:focus {
-    border-color: #3A5347; /* Dark green border on hover and focus */
+    border-color: #074223; /* Dark green border on hover and focus */
     outline: none; /* Remove default outline */
 }
 
 /* Ensure Select2 dropdown uses the same font-family, color, and text size */
 .select2-container--default .select2-results__option {
     
-    font-family: 'Calibri';
+    font-family: 'Segoe UI','Arial';
     color: #333; /* Match the color used in the body */
     font-size: 15px; /* Adjust the font size as needed */
 }
 
 /* Additional styles for Select2 dropdown */
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #3A5347; /* Dark green background for highlighted option */
+    background-color: #074223; /* Dark green background for highlighted option */
     color: white; /* White text for highlighted option */
 }
 
@@ -460,7 +461,7 @@ body {
 
 /* CSS login page */
 .login-body {
-    font-family: 'Calibri','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI','Arial', Tahoma, Geneva, Verdana, sans-serif;
     background-color:#EFF6F0; 
     /* #f0f2f5; */
     display: flex;
@@ -496,6 +497,7 @@ body {
 }
 
 .login-left {
+    padding-top: 80px;
     background-color: #f7f7f7;
     flex: 1;
     display: flex;
@@ -522,12 +524,12 @@ body {
 
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     text-align: left;
 }
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     color: #3A5347; /* Dark green color */
     font-weight: bold;
 }
@@ -538,7 +540,7 @@ body {
     border: 1px solid #ced4da;
     border-radius: 5px;
     box-sizing: border-box;
-    font-family: 'Calibri', sans-serif;
+    font-family: 'Segoe UI',Arial;
     font-size: 16px;
     color: #333;
 }
@@ -547,6 +549,7 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 
 .oauth {
     display: flex;
@@ -569,6 +572,19 @@ body {
     margin-right: 10px;
 }
 
+/* New styles for primary OAuth button */
+.oauth.primary {
+    padding: 15px 15px 15px 30px;
+    font-size: 18px;
+    border: 2px solid #2b579a;
+}
+
+.oauth.secondary {
+    padding: 3px 8px 3px 30px;
+    font-size: 14px;
+    border: 1px solid transparent;
+    margin-bottom: 5px;
+}
 .oauth.google {
     background-color: #db4437;
 }
@@ -600,15 +616,16 @@ body {
 }
 .signup-link {
     font-size: 14px;
-    color: #3A5347; /* Dark green color */
+    color: #074223; /* Dark green color */
 }
 
 .signup-link a {
-    color: #3A5347; /* Dark green color */
-    text-decoration: none;
+    color: #074223; /* Dark green color */
+    text-decoration: underline;
 }
 
 .signup-link a:hover {
+    color: #124d2d; /* Dark green color */
     text-decoration: underline;
 }
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="no">
 <head>
     <meta charset="UTF-8">
@@ -16,15 +16,17 @@
             <div class="login-right">
                 <h3>Logg inn med din konto på:</h3>
                 <div class="oauth-buttons">
-                    <a href="/auth/google" class="oauth google">
-                        <i class="bi bi-google"></i> Google
-                    </a>
                     <a href="/auth/azuread" class="oauth microsoft">
                         <i class="bi bi-microsoft"></i> Microsoft
+                    </a>
+                    
+                    <a href="/auth/google" class="oauth google">
+                        <i class="bi bi-google"></i> Google
                     </a>
                     <a href="/auth/linkedin" class="oauth linkedin">
                         <i class="bi bi-linkedin"></i> LinkedIn
                     </a>
+                    
                 </div>
                 <p class="cookie-notice">Informasjonskapsler må være aktivert i nettleseren din</p>
             </div>
@@ -38,4 +40,43 @@
   </div>
 </body>
 </html>
-
+ -->
+ <!DOCTYPE html>
+ <html lang="no">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Logg inn</title>
+     <link rel="stylesheet" href="styles.css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+     <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+ </head>
+ <body>
+   <div class="login-body">
+     <div class="login-container">
+         <div class="login-box">
+             <div class="login-right">
+                 <h3>Logg inn med din konto på:</h3>
+                 <div class="oauth-buttons">
+                    <a href="/auth/azuread" class="oauth microsoft primary">
+                        <i class="bi bi-microsoft"></i> Microsoft
+                    </a>
+                    <p>Hvis du ikke har Microsoft, kan du bruke disse:</p>
+                    <a href="/auth/google" class="oauth google secondary">
+                        <i class="bi bi-google"></i> Google
+                    </a>
+                    <a href="/auth/linkedin" class="oauth linkedin secondary">
+                        <i class="bi bi-linkedin"></i> LinkedIn
+                    </a>
+                </div>
+                 <p class="cookie-notice">Informasjonskapsler må være aktivert i nettleseren din</p>
+             </div>
+             <div class="login-left">
+               <img src="logo.png" alt="Maker Logo" class="logo">
+               <p class="signup-link">Har du noen spørsmål? <a href="https://share-eu1.hsforms.com/1CRnd2UHlQl6EhjUkvhquLg2d9w57">Kontakt oss</a></p>
+           </div>
+         </div>
+     </div>
+   </div>
+ </body>
+ </html>
