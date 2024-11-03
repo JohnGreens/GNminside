@@ -57,11 +57,6 @@ const reportContainerElement = document.getElementById('reportContainer');
 let reportInstance;
 let currentReportPageName = null;
 
-// report.on will add an event listener.
-reportInstance.on("pageChanged", function (event) {
-    let page = event.detail.newPage;
-    console.log("Event - pageChanged:\nPage changed to \"" + page.name + "\" - \"" + page.displayName + "\"");
-});
 
 //, projectFilterValues = [], ouidFilterValues = []
 async function embedReport(reportId) {
