@@ -132,11 +132,7 @@
         const formattedEnd = end.toISOString().slice(0, 7);
         document.getElementById('monthYearRangePicker').value = `${formattedStart} to ${formattedEnd}`;
     });
-    // report.on will add an event listener.
-        reportInstance.on("pageChanged", function (event) {
-            let page = event.detail.newPage;
-            console.log("Event - pageChanged:\nPage changed to \"" + page.name + "\" - \"" + page.displayName + "\"");
-        });
+    
 
     </script>
 </body>

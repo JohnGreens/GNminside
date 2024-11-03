@@ -410,6 +410,11 @@ window.onload = function() {
             initializeProjectSelect();
 
             $('#projectFilterSelect').on('change', applyProjectFilter);
+            // report.on will add an event listener.
+            reportInstance.on("pageChanged", function (event) {
+                let page = event.detail.newPage;
+                console.log("Event - pageChanged:\nPage changed to \"" + page.name + "\" - \"" + page.displayName + "\"");
+            });
         })
         .catch(error => {
             console.error('Error fetching REPORT_1_ID from server:', error);
