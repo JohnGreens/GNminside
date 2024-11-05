@@ -110,6 +110,7 @@
         let endDateMinusOneMonth = new Date(endDate.getFullYear(), endDate.getMonth()-1, 1, 0, 0, 0);
         let startDate = new Date(endDateMinusOneMonth.getFullYear(), 0, 1, 0, 0, 0);
 
+    
         // Initialize Flatpickr for month and year range selection
         const monthYearRangePicker = flatpickr("#monthYearRangePicker", {
             mode: "range",
@@ -135,8 +136,10 @@
         });
 
         // Manually set the value of the input field to display the default date range
-        const formattedStart = startDate.toISOString().slice(0, 7);
-        const formattedEnd = endDate.toISOString().slice(0, 7);
+        const endDateVisual = new Date(endDate.getFullYear(), endDate.getMonth()+1, 1, 0, 0, 0);
+        const startDateVisual = new Date(startDate.getFullYear(), startDate.getMonth()+1, 1, 0, 0, 0);
+        const formattedStart = startDateVisual.toISOString().slice(0, 7);
+        const formattedEnd = endDateVisual.toISOString().slice(0, 7);
         document.getElementById('monthYearRangePicker').value = `${formattedStart} to ${formattedEnd}`;
     });
     
