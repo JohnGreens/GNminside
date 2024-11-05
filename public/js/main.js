@@ -173,7 +173,15 @@ async function embedReport(reportId) {
 
         // Embed the report
         reportInstance = powerBIService.embed(reportContainerElement, reportConfig);
-
+        
+        // Get the current active page
+        try {
+            const activePage = await reportInstance.getActivePage();
+            console.log("The active page is \"" + activePage.name + "\" with display name \"" + activePage.displayName + "\"");
+        } catch (errors) {
+            console.log(errors);
+        }
+        
     } catch (error) {
         console.error('Error loading report:', error);
     }
@@ -410,11 +418,6 @@ window.onload = function() {
             initializeProjectSelect();
 
             $('#projectFilterSelect').on('change', applyProjectFilter);
-            // report.on will add an event listener.
-            reportInstance.on("pageChanged", function (event) {
-                let page = event.detail.newPage;
-                console.log("Event - pageChanged:\nPage changed to \"" + page.name + "\" - \"" + page.displayName + "\"");
-            });
         })
         .catch(error => {
             console.error('Error fetching REPORT_1_ID from server:', error);

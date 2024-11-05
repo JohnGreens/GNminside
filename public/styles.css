@@ -413,6 +413,7 @@ body {
     font-family: 'Segoe UI','Arial' !important;
     color: #333 !important;
 }
+/* .select2-search__field */
 
 /* Hover and focus states for Select2 elements */
 .select2-container--default .select2-selection--single:hover,
