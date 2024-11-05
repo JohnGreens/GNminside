@@ -135,8 +135,8 @@
         });
 
         // Manually set the value of the input field to display the default date range
-        const formattedStart = start.toISOString().slice(0, 7);
-        const formattedEnd = end.toISOString().slice(0, 7);
+        const formattedStart = startDate.toISOString().slice(0, 7);
+        const formattedEnd = endDate.toISOString().slice(0, 7);
         document.getElementById('monthYearRangePicker').value = `${formattedStart} to ${formattedEnd}`;
     });
     
