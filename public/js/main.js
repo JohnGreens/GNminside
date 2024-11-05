@@ -79,12 +79,14 @@ async function embedReport(reportId) {
                 .map(project => project.orgIDs)
                 .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
                 .flat();  // Flatten the nested arrays into a single array 
-        } else if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
-            ouidFilterValues = ['empy9999999999999']
-        } else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
-            projectFilterValues = [9999999999999]
         } 
-        alert("ouidFilterValues",ouidFilterValues)
+        // else if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
+        //     ouidFilterValues = ['empy9999999999999']
+        // } 
+        // else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
+        //     projectFilterValues = [9999999999999]
+        // } 
+ 
         if (!ouidFilterValues || ouidFilterValues.length === 0) {
             ouidFilterValues = ['empy9999999999999']
         }
@@ -158,7 +160,7 @@ async function embedReport(reportId) {
                 ]
             }
         ];
-        alert("filters",filters)
+
             //Sjekk ut denne !
         let filterPaneEnabledStatus = false
         if (projectAccessUserRights == 'admin'){
@@ -227,11 +229,19 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                 .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
                 .flat();  // Flatten the nested arrays into a single array
         } 
-        else if ((selectedProjectIds && selectedProjectIds.length >= 0)&&(!selectedOUIDs || selectedOUIDs.length === 0)) {
+        // else if ((selectedProjectIds && selectedProjectIds.length >= 0)&&(!selectedOUIDs || selectedOUIDs.length === 0)) {
+        //     selectedOUIDs = ['empy9999999999999']
+        // } else if ((selectedOUIDs && selectedOUIDs.length >= 0)&&(!selectedProjectIds || selectedProjectIds.length === 0)) {
+        //     selectedProjectIds = [9999999999999]
+        // } 
+
+        if (!selectedOUIDs || selectedOUIDs.length === 0) {
             selectedOUIDs = ['empy9999999999999']
-        } else if ((selectedOUIDs && selectedOUIDs.length >= 0)&&(!selectedProjectIds || selectedProjectIds.length === 0)) {
+        }
+        if (!selectedProjectIds || selectedProjectIds.length === 0) {
             selectedProjectIds = [9999999999999]
-        } 
+        }
+
 
         if (reportInstance) {
             const filters = [
@@ -272,7 +282,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                     ]
                 }
             ];
-            alert("filters",filters)
+
             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
         } else {
             console.warn('Report instance is not available.');
@@ -410,7 +420,6 @@ window.onload = function() {
     fetch('/config')
         .then(response => response.json())
         .then(config => {
-            console.log('Config:', config);
             const REPORT_1_ID = config.report1Id;
 
             // Fetch and populate the reports
