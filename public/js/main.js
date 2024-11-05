@@ -74,18 +74,25 @@ async function embedReport(reportId) {
             projectFilterValues = getProjectAccessDetails()
                 .map(project => project.projectIDs)
                 .filter(projectIDs => projectIDs && projectIDs.length > 0)
-                .flat()
-                || [9999999999999];
+                .flat();
             ouidFilterValues = getProjectAccessDetails()
                 .map(project => project.orgIDs)
                 .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
-                .flat()  // Flatten the nested arrays into a single array 
-                || ['empy9999999999999'];
+                .flat();  // Flatten the nested arrays into a single array 
         } else if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
             ouidFilterValues = ['empy9999999999999']
         } else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
             projectFilterValues = [9999999999999]
         } 
+
+        if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
+            ouidFilterValues = ['empy9999999999999']
+        }
+        if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
+            projectFilterValues = [9999999999999]
+        }
+
+        
         
         // Clear previous instance before embedding
         powerBIService.reset(reportContainerElement);
