@@ -84,7 +84,7 @@ async function embedReport(reportId) {
         } else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
             projectFilterValues = [9999999999999]
         } 
-        console.log("ouidFilterValues",ouidFilterValues)
+        alert("ouidFilterValues",ouidFilterValues)
         if (!ouidFilterValues || ouidFilterValues.length === 0) {
             ouidFilterValues = ['empy9999999999999']
         }
@@ -158,7 +158,7 @@ async function embedReport(reportId) {
                 ]
             }
         ];
-        console.log("filters",filters)
+        alert("filters",filters)
             //Sjekk ut denne !
         let filterPaneEnabledStatus = false
         if (projectAccessUserRights == 'admin'){
@@ -272,7 +272,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                     ]
                 }
             ];
-            console.log("filters",filters)
+            alert("filters",filters)
             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
         } else {
             console.warn('Report instance is not available.');
