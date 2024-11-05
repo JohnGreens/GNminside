@@ -84,11 +84,11 @@ async function embedReport(reportId) {
         } else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
             projectFilterValues = [9999999999999]
         } 
-
-        if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
+        console.log("ouidFilterValues",ouidFilterValues)
+        if (!ouidFilterValues || ouidFilterValues.length === 0) {
             ouidFilterValues = ['empy9999999999999']
         }
-        if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
+        if (!projectFilterValues || projectFilterValues.length === 0) {
             projectFilterValues = [9999999999999]
         }
 
