@@ -57,39 +57,6 @@ const reportContainerElement = document.getElementById('reportContainer');
 let reportInstance;
 let currentReportPageName = null;
 
-//PRELOAD REPORT
-document.addEventListener('DOMContentLoaded', function() {
-    const reportId = 'your-report-id'; // Replace with your actual report ID
-    preloadReport(reportId);
-
-    // Automatically embed the preloaded report after a short delay
-    setTimeout(function() {
-        embedReport(reportId);
-    }, 2000); // Adjust the delay as needed
-});
-async function preloadReport(reportId) {
-    try {
-        const response = await fetch(`/embed-info/${reportId}`);
-        const embedInfo = await response.json();
-
-        const reportConfig = {
-            type: 'report',
-            tokenType: window['powerbi-client'].models.TokenType.Embed,
-            accessToken: embedInfo.embedToken,
-            embedUrl: embedInfo.embedUrl,
-            id: embedInfo.reportId,
-            settings: {
-                filterPaneEnabled: false,
-                navContentPaneEnabled: false
-            }
-        };
-
-        // Preload the report using the bootstrap method
-        powerBIService.bootstrap(document.getElementById('reportContainer'), reportConfig);
-    } catch (error) {
-        console.error('Error preloading report:', error);
-    }
-}
 
 async function embedReport(reportId) {
 
