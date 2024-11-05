@@ -62,7 +62,6 @@ passport.use('azuread', new CustomStrategy((req, done) => {
 
 
 passport.serializeUser((user, done) => {
-    // console.log('Serializing user:', user);
     done(null, user);
 });
 

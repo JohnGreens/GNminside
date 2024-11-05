@@ -21,7 +21,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         body: JSON.stringify({ fornavn, etternavn, organisasjon, rolle, telefon, authID, authProvider, email,authProviderUsername,authProviderEmail,kommentar })
     
     });
-    console.log(response)
+    // console.log(response)
     if (response.ok) {
         alert('Registering fullført du får beksjed når bruker er verifisert');
         window.location.href = '/login'; // Redirect to login page

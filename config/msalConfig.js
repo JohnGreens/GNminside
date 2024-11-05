@@ -11,7 +11,6 @@ module.exports = {
     system: {
         loggerOptions: {
             loggerCallback(logLevel, message, containsPii) {
-                // console.log(message);
             },
             piiLoggingEnabled: true,
             logLevel: LogLevel.Verbose,

@@ -7,7 +7,6 @@ const {fetchPowerBIEmbedInfo,reportsList} = require('../config/powerbiEmbed-setu
 
 
 router.get('/', (req, res) => {
-    console.log('User authenticated:', req.isAuthenticated());
     if (req.isAuthenticated()) {
         const userRights =  req.user.userRights || req.session.userRights ||  null;
         const accessCode = req.user.accessCode || req.session.accessCode || null;

@@ -58,9 +58,8 @@ let reportInstance;
 let currentReportPageName = null;
 
 
-//, projectFilterValues = [], ouidFilterValues = []
 async function embedReport(reportId) {
-    // console.log("embedReport")
+
     try {
         let projectFilterValues = []
         let ouidFilterValues = []
@@ -97,8 +96,12 @@ async function embedReport(reportId) {
         const selectedDates = dateRangePicker.selectedDates;
 
         // Format the start and end dates to the start and end of the selected months
-        let startDate = "2022-01-01T00:00:00Z"; // Default start date
-        let endDate = "2024-11-01T00:00:00Z"; // Default end date
+        const currentDate = new Date();
+        // let startDate = "2022-01-01T00:00:00Z"; // Default start date
+        // let endDate = "2024-11-01T00:00:00Z"; // Default end date
+        let endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 0, 0, 0);
+        let endDateMinusOneMonth = new Date(endDate.getFullYear(), endDate.getMonth()-1, 1, 0, 0, 0);
+        let startDate = new Date(endDateMinusOneMonth.getFullYear(), 0, 1, 0, 0, 0);
 
         if (selectedDates.length === 2) {
             const start = selectedDates[0];
@@ -145,7 +148,7 @@ async function embedReport(reportId) {
                 ]
             }
         ];
-        // console.log("filter",filters)
+        
         let filterPaneEnabledStatus = false
         if (projectAccessUserRights == 'admin'){
             filterPaneEnabledStatus = true
@@ -174,13 +177,16 @@ async function embedReport(reportId) {
         // Embed the report
         reportInstance = powerBIService.embed(reportContainerElement, reportConfig);
         
-        // Get the current active page
-        try {
-            const activePage = await reportInstance.getActivePage();
-            console.log("The active page is \"" + activePage.name + "\" with display name \"" + activePage.displayName + "\"");
-        } catch (errors) {
-            console.log(errors);
-        }
+        // Listen for the loaded event
+        reportInstance.on('loaded', async function() {
+            // Get the current active page
+            try {
+                const activePage = await reportInstance.getActivePage();
+                console.log("The active page is \"" + activePage.name + "\" with display name \"" + activePage.displayName + "\"");
+            } catch (errors) {
+                console.log(errors);
+            }
+        });
 
     } catch (error) {
         console.error('Error loading report:', error);
@@ -189,16 +195,18 @@ async function embedReport(reportId) {
 
 
 async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
-    // console.log("updateReportFilters")
     try {
-        // console.log("test updatereportfilter0")
         // Extract the selected date range from the Flatpickr date picker
         const dateRangePicker = document.getElementById('monthYearRangePicker')._flatpickr;
         const selectedDates = dateRangePicker.selectedDates;
-        // console.log("test updatereportfilter1")
+
         // Format the start and end dates to the start and end of the selected months
-        let startDate = "2022-01-01T00:00:00Z"; // Default start date
-        let endDate = "2024-11-01T00:00:00Z"; // Default end date
+        const currentDate = new Date();
+        // let startDate = "2022-01-01T00:00:00Z"; // Default start date
+        // let endDate = "2024-11-01T00:00:00Z"; // Default end date
+        let endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 0, 0, 0);
+        let endDateMinusOneMonth = new Date(endDate.getFullYear(), endDate.getMonth()-1, 1, 0, 0, 0);
+        let startDate = new Date(endDateMinusOneMonth.getFullYear(), 0, 1, 0, 0, 0);
 
         if (selectedDates.length === 2) {
             const start = selectedDates[0];
@@ -207,7 +215,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
             startDate = new Date(start.getFullYear(), start.getMonth(), 1).toISOString();
             endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59).toISOString();
         }
-        // console.log("test updatereportfilter2")
+
         // No filtering is selected so all available ids is passed to the powerbi filter
         if ((!selectedProjectIds || selectedProjectIds.length === 0)&&(!selectedOUIDs || selectedOUIDs.length === 0)) {
             selectedProjectIds = getProjectAccessDetails()
@@ -224,10 +232,8 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
         } else if ((selectedOUIDs && selectedOUIDs.length >= 0)&&(!selectedProjectIds || selectedProjectIds.length === 0)) {
             selectedProjectIds = [9999999999999]
         } 
-        // console.log("test updatereportfilter3")
 
         if (reportInstance) {
-            // console.log("test updatereportfilter4")
             const filters = [
                 {
                     $schema: "http://powerbi.com/product/schema#basic",
@@ -236,7 +242,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                         column: "ProjectID"
                     },
                     operator: "In",
-                    values: selectedProjectIds  // Ensure filter values are numbers
+                    values: selectedProjectIds  
                 },
                 {
                     $schema: "http://powerbi.com/product/schema#basic",
@@ -245,7 +251,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                         column: "OrgUnitID"
                     },
                     operator: "In",
-                    values: selectedOUIDs  // Ensure valid OUIDs
+                    values: selectedOUIDs 
                 },
                 {
                     $schema: "https://powerbi.com/product/schema#advanced",
@@ -266,7 +272,6 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                     ]
                 }
             ];
-            // console.log("filter",filters)
             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
         } else {
             console.warn('Report instance is not available.');
@@ -401,7 +406,6 @@ function getProjectAccessDetails() {
 
 // Initialize the application on window load
 window.onload = function() {
-    // console.log("window.onload")
     fetch('/config')
         .then(response => response.json())
         .then(config => {
@@ -422,7 +426,7 @@ window.onload = function() {
         .catch(error => {
             console.error('Error fetching REPORT_1_ID from server:', error);
         });
-        
+
 }
 
 // Make functions available globally
