@@ -74,11 +74,13 @@ async function embedReport(reportId) {
             projectFilterValues = getProjectAccessDetails()
                 .map(project => project.projectIDs)
                 .filter(projectIDs => projectIDs && projectIDs.length > 0)
-                .flat();
+                .flat()
+                || [9999999999999];
             ouidFilterValues = getProjectAccessDetails()
                 .map(project => project.orgIDs)
                 .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
-                .flat();  // Flatten the nested arrays into a single array
+                .flat()  // Flatten the nested arrays into a single array 
+                || ['empy9999999999999'];
         } else if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
             ouidFilterValues = ['empy9999999999999']
         } else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
@@ -401,6 +403,7 @@ window.onload = function() {
     fetch('/config')
         .then(response => response.json())
         .then(config => {
+            console.log('Config:', config);
             const REPORT_1_ID = config.report1Id;
 
             // Fetch and populate the reports
