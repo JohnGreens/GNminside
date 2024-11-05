@@ -181,7 +181,7 @@ async function embedReport(reportId) {
         } catch (errors) {
             console.log(errors);
         }
-        
+
     } catch (error) {
         console.error('Error loading report:', error);
     }
@@ -422,6 +422,7 @@ window.onload = function() {
         .catch(error => {
             console.error('Error fetching REPORT_1_ID from server:', error);
         });
+        
 }
 
 // Make functions available globally
