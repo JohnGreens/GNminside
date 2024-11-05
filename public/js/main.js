@@ -110,6 +110,7 @@ async function embedReport(reportId) {
             startDate = new Date(start.getFullYear(), start.getMonth(), 1).toISOString();
             endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59).toISOString();
         }
+        
         const filters = [
             {
                 $schema: "http://powerbi.com/product/schema#basic",
@@ -148,7 +149,8 @@ async function embedReport(reportId) {
                 ]
             }
         ];
-
+        console.log("filters",filters)
+            //Sjekk ut denne !
         let filterPaneEnabledStatus = false
         if (projectAccessUserRights == 'admin'){
             filterPaneEnabledStatus = true
@@ -261,6 +263,7 @@ async function updateReportFilters(selectedProjectIds, selectedOUIDs) {
                     ]
                 }
             ];
+            console.log("filters",filters)
             await reportInstance.updateFilters(window['powerbi-client'].models.FiltersOperations.Replace, filters);
         } else {
             console.warn('Report instance is not available.');
