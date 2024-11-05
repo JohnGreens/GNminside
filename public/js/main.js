@@ -148,7 +148,7 @@ async function embedReport(reportId) {
                 ]
             }
         ];
-        
+
         let filterPaneEnabledStatus = false
         if (projectAccessUserRights == 'admin'){
             filterPaneEnabledStatus = true
@@ -176,17 +176,6 @@ async function embedReport(reportId) {
 
         // Embed the report
         reportInstance = powerBIService.embed(reportContainerElement, reportConfig);
-        
-        // Listen for the loaded event
-        reportInstance.on('loaded', async function() {
-            // Get the current active page
-            try {
-                const activePage = await reportInstance.getActivePage();
-                console.log("The active page is \"" + activePage.name + "\" with display name \"" + activePage.displayName + "\"");
-            } catch (errors) {
-                console.log(errors);
-            }
-        });
 
     } catch (error) {
         console.error('Error loading report:', error);

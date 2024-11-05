@@ -98,10 +98,17 @@
         //});
 
         // Calculate the last 12 months
-        const end = new Date();
-        const start = new Date();
-        start.setFullYear(end.getFullYear() - 1);
-        start.setMonth(end.getMonth() + 1);
+       // const end = new Date();
+       // const start = new Date();
+       // start.setFullYear(end.getFullYear() - 1);
+       // start.setMonth(end.getMonth() + 1);
+
+        const currentDate = new Date();
+        // let startDate = "2022-01-01T00:00:00Z"; // Default start date
+        // let endDate = "2024-11-01T00:00:00Z"; // Default end date
+        let endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 0, 0, 0);
+        let endDateMinusOneMonth = new Date(endDate.getFullYear(), endDate.getMonth()-1, 1, 0, 0, 0);
+        let startDate = new Date(endDateMinusOneMonth.getFullYear(), 0, 1, 0, 0, 0);
 
         // Initialize Flatpickr for month and year range selection
         const monthYearRangePicker = flatpickr("#monthYearRangePicker", {
@@ -109,7 +116,7 @@
             dateFormat: "Y-m",
             minDate: "2020-01",
             maxDate: new Date().toISOString().slice(0, 7), // Current month and year
-            defaultDate: [start, end], // Set the last 12 months as default
+            defaultDate: [startDate, endDate], // Set the last 12 months as default
             locale: "no", // Set the locale to Norwegian
             plugins: [
                 new monthSelectPlugin({
