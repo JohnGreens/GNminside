@@ -41,11 +41,31 @@ router.get('/config', (req, res) => {
 });
 
 
+// // API endpoint to get the list of reports for menu
+// router.get('/reports', async (req, res) => {
+//     // console.log('/reports',req.user)
+//     if (req.session.reportsList2) {
+//     if (!reportsList2){
+//         let reportsList2= await fetchReportsMenu(req.user.id)
+//     }
+//     res.json(reportsList2);
+// });
 // API endpoint to get the list of reports for menu
 router.get('/reports', async (req, res) => {
-    // console.log('/reports',req.user)
-    let reportsList2= await fetchReportsMenu(req.user.id)
-    res.json(reportsList2);
+    if (req.session.reportsList2) {
+        // Return the reports list from the session if it exists
+        res.json(req.session.reportsList2);
+    } else {
+        // Fetch the reports list and store it in the session
+        try {
+            const reportsList2 = await fetchReportsMenu(req.user.id);
+            req.session.reportsList2 = reportsList2;
+            res.json(reportsList2);
+        } catch (error) {
+            console.error('Error fetching reports list:', error);
+            res.status(500).send('Error fetching reports list');
+        }
+    }
 });
 
 

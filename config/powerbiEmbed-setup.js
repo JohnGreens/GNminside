@@ -56,19 +56,6 @@ async function fetchPowerBIEmbedInfo(reportId) {
 }
 
 
-// Load reports configuration from environment variables
-// const numberOfReports = parseInt(process.env.NUM_REPORTS, 10);
-// const reportsList = [];
-
-// // Populate reportsList with data from environment variables
-// for (let i = 1; i <= numberOfReports; i++) {
-//     reportsList.push({
-//         id: process.env[`REPORT_${i}_ID`],
-//         name: decodeURIComponent(process.env[`REPORT_${i}_NAME`]),
-//         icon: process.env[`REPORT_${i}_ICON`]
-//     });
-// }
-
 
 async function fetchReportsMenu(AuthID) {
     const reportsList2 = [];
@@ -76,30 +63,17 @@ async function fetchReportsMenu(AuthID) {
         TypeOfRequest: "fetchReportsMenu",
         AuthID: AuthID  
     });
-    // console.log(response.data.reportMenu.ResultSets.Table1);
-    const rapports = response.data.reportMenu.ResultSets.Table1
-    console.log(rapports)
-    console.log(rapports[1].ItemName)
 
+    const rapports = response.data.reportMenu.ResultSets.Table1
     rapports.forEach(rapport => {
-        console.log(rapport.ItemName)
         reportsList2.push({
             id:rapport.ReportID,
             name: rapport.ItemName,
             icon: rapport.ReportIcon
         });
     })
-    // for (let i = 1; i <= rapports.length; i++) {
-    //     reportsList2.push({
-    //         id:rapports[i].ReportID,
-    //         name: rapports[i].ItemName,
-    //         icon: rapports[i].ReportIcon
-    //     });
-    // }
-    return reportsList2
 
-
-    
+    return reportsList2 
 }
 
 
@@ -107,6 +81,4 @@ async function fetchReportsMenu(AuthID) {
 module.exports = {
     fetchPowerBIEmbedInfo: fetchPowerBIEmbedInfo,
     fetchReportsMenu:fetchReportsMenu
-    // ,
-    // reportsList: reportsList
 };
