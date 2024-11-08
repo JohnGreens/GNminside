@@ -163,8 +163,10 @@ async function embedReport(reportId) {
 
             //Sjekk ut denne !
         let filterPaneEnabledStatus = false
-        if (projectAccessUserRights == 'admin'){
+        let navContentPaneEnabled = false
+        if (projectAccessUserRights == 'admin' || projectAccessUserRights == 'Green Norway Employed') {
             filterPaneEnabledStatus = true
+            navContentPaneEnabled = true
         }
         const reportConfig = {
             type: 'report',
@@ -175,7 +177,7 @@ async function embedReport(reportId) {
             filters: filters,
             settings: {
                 filterPaneEnabled: filterPaneEnabledStatus,
-                navContentPaneEnabled: false,
+                navContentPaneEnabled: navContentPaneEnabled,
                 layoutType: 1 //3
                 // Widescreen = 0	
                 // Standard = 1	
