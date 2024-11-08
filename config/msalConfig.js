@@ -1,6 +1,8 @@
-// require('dotenv').config();
-const {LogLevel } = require('@azure/msal-node')
 
+const {LogLevel } = require('@azure/msal-node')
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+  }
 
 module.exports = {
     auth: {

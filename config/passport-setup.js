@@ -5,7 +5,6 @@ const { ConfidentialClientApplication } = require('@azure/msal-node');
 const msalConfig = require('./msalConfig');
 const pca = new ConfidentialClientApplication(msalConfig);
 const CustomStrategy = require('passport-custom').Strategy;
-// require('dotenv').config();
 
 
 passport.use(new GoogleStrategy({
@@ -62,6 +61,7 @@ passport.use('azuread', new CustomStrategy((req, done) => {
 
 
 passport.serializeUser((user, done) => {
+    console.log('Serializing user:', user);
     done(null, user);
 });
 

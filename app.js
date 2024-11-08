@@ -6,7 +6,10 @@ const passport = require('passport')
 const authRoutes = require('./routes/auth');
 const indexRoutes = require('./routes/index');
 const handlebars = require('handlebars'); // Explicitly require handlebars
-// require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    console.log('Loading environment variables from .env file');
+    require('dotenv').config();
+  }
 
 
 const app = express();
@@ -20,22 +23,31 @@ app.engine('hbs', exphbs.engine({ extname: '.hbs', defaultLayout: 'main', helper
 
 }}));
 app.set('view engine', 'hbs');
-
 app.set('views', './views');  // Ensure views directory is set correctly
 app.set('trust proxy', 1);  // 1 means trust the first proxy (which is the Azure proxy)
-// Middleware to parse JSON bodies
-app.use(express.json());
 
+app.use(express.json());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: process.env.SESSION_RESAVE,
     saveUninitialized: process.env.SESSION_SAVEUNITIALIZED,
-    cookie: { secure: process.env.SESSION_COOKIE_SECURE}// maxAge: 24 * 60 * 60 * 1000 
+    // cookie: { secure: process.env.SESSION_COOKIE_SECURE}// maxAge: 24 * 60 * 60 * 1000 
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production' // Use secure cookies in production
+    }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+//TEST 
+app.use((req, res, next) => {
+    console.log('Session:', req.session);
+    console.log('User:', req.user);
+    next();
+});
 
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);

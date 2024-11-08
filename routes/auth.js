@@ -4,7 +4,6 @@ const router = express.Router();
 const passport = require('passport');
 const pca = require('../config/passport-setup');
 const {GetAccessID} = require('../config/accessID')
-// require('dotenv').config();
 
 
 
@@ -75,9 +74,11 @@ router.get('/azuread/callback', async (req, res, next) => {
         scopes: ["user.read"],
         redirectUri: process.env.Azure_CALLBACK_URL,
     };
+    console.log('azuread/callback',tokenRequest)
 
     try {
         const response = await pca.acquireTokenByCode(tokenRequest);
+        console.log('response',response)
         const user = {
             id: response.account.localAccountId,
             provider: 'Microsoft',
@@ -87,17 +88,22 @@ router.get('/azuread/callback', async (req, res, next) => {
         const apiResponse = await GetAccessID(user.id);
         if (apiResponse.accessCode && apiResponse.userData.accesscheck==true) {
             // Attach accessCode and userData to user object
+            // user.accessCode = apiResponse.accessCode;
+            // user.userData = apiResponse.userData;
+            // user.userRights=user.userData.userInfo.userRights
             user.accessCode = apiResponse.accessCode;
-            user.userData = apiResponse.userData;
+            user.userData = apiResponse.userData.userInfo;
+            user.userData.accesscheck = apiResponse.userData.accesscheck;
+            user.userRights=user.userData.userRights
 
-            //Ukjent test
-            // req.session.accessCode = user.accessCode;
-            // req.session.userRights = user.userData.userInfo.userRights
 
-            user.userRights=user.userData.userInfo.userRights
             // Log the user in with Passport, storing the accessCode in the session
             req.login(user, function(err) {
-                if (err) { return next(err); }
+                if (err) { 
+                    console.error('Login error:', err);
+                    return next(err); 
+                }
+                console.log('User logged in successfully');
                 return res.redirect('/');  // Redirect to home/dashboard
             });
         } else {
