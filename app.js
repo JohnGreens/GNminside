@@ -7,7 +7,6 @@ const authRoutes = require('./routes/auth');
 const indexRoutes = require('./routes/index');
 const handlebars = require('handlebars'); // Explicitly require handlebars
 if (process.env.NODE_ENV !== 'production') {
-    console.log('Loading environment variables from .env file');
     require('dotenv').config();
   }
 
@@ -43,11 +42,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //TEST 
-app.use((req, res, next) => {
-    console.log('Session:', req.session);
-    console.log('User:', req.user);
-    next();
-});
+// app.use((req, res, next) => {
+//     console.log('Session:', req.session);
+//     console.log('User:', req.user);
+//     next();
+// });
 
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);

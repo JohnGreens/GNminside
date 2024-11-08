@@ -50,9 +50,8 @@ router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedi
 
 
 
-// Azure AD login route
+
 router.get('/azuread', (req, res) => {
-    // const redirectUri = 'http://localhost:3000/auth/azuread/callback';
     const authCodeUrlParameters = {
         scopes: ["user.read"],
         redirectUri: process.env.Azure_CALLBACK_URL,
@@ -74,11 +73,9 @@ router.get('/azuread/callback', async (req, res, next) => {
         scopes: ["user.read"],
         redirectUri: process.env.Azure_CALLBACK_URL,
     };
-    console.log('azuread/callback',tokenRequest)
 
     try {
         const response = await pca.acquireTokenByCode(tokenRequest);
-        console.log('response',response)
         const user = {
             id: response.account.localAccountId,
             provider: 'Microsoft',
@@ -92,9 +89,10 @@ router.get('/azuread/callback', async (req, res, next) => {
             // user.userData = apiResponse.userData;
             // user.userRights=user.userData.userInfo.userRights
             user.accessCode = apiResponse.accessCode;
-            user.userData = apiResponse.userData.userInfo;
-            user.userData.accesscheck = apiResponse.userData.accesscheck;
-            user.userRights=user.userData.userRights
+            // user.userData = apiResponse.userData.userInfo;
+            user.userRights=apiResponse.userData.userInfo.userRights;
+            // user.userData.accesscheck = apiResponse.userData.accesscheck;
+            // user.userRights=user.userData.userRights;
 
 
             // Log the user in with Passport, storing the accessCode in the session
@@ -103,7 +101,6 @@ router.get('/azuread/callback', async (req, res, next) => {
                     console.error('Login error:', err);
                     return next(err); 
                 }
-                console.log('User logged in successfully');
                 return res.redirect('/');  // Redirect to home/dashboard
             });
         } else {
@@ -111,7 +108,6 @@ router.get('/azuread/callback', async (req, res, next) => {
                 if (err) { return next(err); }
                 return res.redirect('/register');  // Redirect to register
             });
-            // res.redirect('/register');
         }
     } catch (error) {
         console.error("Error during authentication:", error);

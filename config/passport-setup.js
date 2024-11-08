@@ -42,7 +42,6 @@ passport.use(new LinkedInStrategy({
 
 
 passport.use('azuread', new CustomStrategy((req, done) => {
-    // const redirectUri = 'http://localhost:3000/auth/azuread/callback';
     const redirectUri = '/auth/azuread/callback';
     const authCodeUrlParameters = {
         scopes: ["user.read"],
@@ -61,7 +60,6 @@ passport.use('azuread', new CustomStrategy((req, done) => {
 
 
 passport.serializeUser((user, done) => {
-    console.log('Serializing user:', user);
     done(null, user);
 });
 

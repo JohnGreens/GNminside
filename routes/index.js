@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
-const {fetchPowerBIEmbedInfo,reportsList} = require('../config/powerbiEmbed-setup');
-
+const {fetchPowerBIEmbedInfo,fetchReportsMenu} = require('../config/powerbiEmbed-setup');
+//,reportsList
 
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
@@ -16,8 +16,9 @@ router.get('/', (req, res) => {
             res.render('dashboard', { 
                 title: 'GreenSide', 
                 accessCode: JSON.stringify(accessCode),
-                userRights: userRights,
-                reports: reportsList  // Pass reportsList to the template
+                userRights: userRights
+                // ,
+                // reports: reportsList  // Pass reportsList to the template
             });
         } else {
             console.log('No access code, redirecting to login');
@@ -38,10 +39,17 @@ router.get('/test', (req, res) => {
 router.get('/config', (req, res) => {
     res.json({ report1Id: process.env.REPORT_1_ID });
 });
+
+
 // API endpoint to get the list of reports for menu
-router.get('/reports', (req, res) => {
-    res.json(reportsList);
+router.get('/reports', async (req, res) => {
+    // console.log('/reports',req.user)
+    let reportsList2= await fetchReportsMenu(req.user.id)
+    res.json(reportsList2);
 });
+
+
+
 // API endpoint to retrieve embedding information for a specific report
 router.get('/embed-info/:reportId', async (req, res) => {
     try {
