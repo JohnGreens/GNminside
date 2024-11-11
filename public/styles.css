@@ -403,7 +403,7 @@ body {
     color: #333; /* Match the color used in the body */
     font-size: 16px; /* Adjust the font size as needed */
     background-color: #fff; /* White background */
-    border: 1px solid #ced4da; /* Light gray border */
+    border: 1px solid #ced4da !important; /* Light gray border */
     border-radius: 4px; /* Rounded corners */
     padding: 5px 0px 10px 5px !important; 
     box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
@@ -413,16 +413,7 @@ body {
     font-family: 'Segoe UI','Arial' !important;
     color: #333 !important;
 }
-/* .select2-search__field */
 
-/* Hover and focus states for Select2 elements */
-.select2-container--default .select2-selection--single:hover,
-.select2-container--default .select2-selection--multiple:hover,
-.select2-container--default .select2-selection--single:focus,
-.select2-container--default .select2-selection--multiple:focus {
-    border-color: #074223; /* Dark green border on hover and focus */
-    outline: none; /* Remove default outline */
-}
 
 /* Ensure Select2 dropdown uses the same font-family, color, and text size */
 .select2-container--default .select2-results__option {
@@ -432,23 +423,38 @@ body {
     font-size: 15px; /* Adjust the font size as needed */
 }
 
-/* Additional styles for Select2 dropdown */
-.select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #074223; /* Dark green background for highlighted option */
-    color: white; /* White text for highlighted option */
+
+
+/* Juster linjehøyden og padding for Select2-dropdown */
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    line-height: 1; /* Juster linjehøyden etter behov */
+    padding: 8px 10px; /* Juster padding etter behov */
+    overflow: visible; /* Sørg for at teksten ikke blir kuttet */
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    line-height: 1; /* Juster linjehøyden etter behov */
+    padding: 5px 10px; /* Juster padding etter behov */
+    margin: 2px 5px; /* Juster margin etter behov */
+    overflow: visible; /* Sørg for at teksten ikke blir kuttet */
 }
 
 
+/* Juster linjehøyden og padding for Select2 søkefelt */
+.select2-container--default .select2-search--inline .select2-search__field {
+    line-height: 1; /* Juster linjehøyden etter behov */
+    padding: 5px 10px; /* Juster padding etter behov */
+    font-family: 'Segoe UI', 'Arial'; /* Match fonten brukt i body */
+    color: #333; /* Match fargen brukt i body */
+    font-size: 16px; /* Juster tekststørrelsen etter behov */
+    overflow: visible; /* Sørg for at teksten ikke blir kuttet */
+}
 
-
-
-
-
-
-
-
-
-
+/* Juster høyden på Select2 elementet */
+.select2-container--default .select2-selection--multiple {
+    min-height: 38px; /* Juster høyden etter behov */
+    overflow: visible; /* Sørg for at teksten ikke blir kuttet */
+}
 
 
 
