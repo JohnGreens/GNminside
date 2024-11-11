@@ -15,8 +15,9 @@ router.get('/', (req, res) => {
             // Add reportsList to the rendered dashboard
             res.render('dashboard', { 
                 title: 'GreenSide', 
-                accessCode: JSON.stringify(accessCode),
-                userRights: userRights
+                accessCode: JSON.stringify(accessCode)
+                // ,
+                // userRights: userRights
                 // ,
                 // reports: reportsList  // Pass reportsList to the template
             });
@@ -30,26 +31,15 @@ router.get('/', (req, res) => {
     }
 });
 
-router.get('/test', (req, res) => {
-            res.render('dashboard', { title: 'GreenSide' });
-});
+
 
 
 // Endpoint to serve the REPORT_1_ID to the client
 router.get('/config', (req, res) => {
-    res.json({ report1Id: process.env.REPORT_1_ID });
+    res.json({ report1Id: process.env.DEFAULTREPPORTID });
 });
 
 
-// // API endpoint to get the list of reports for menu
-// router.get('/reports', async (req, res) => {
-//     // console.log('/reports',req.user)
-//     if (req.session.reportsList2) {
-//     if (!reportsList2){
-//         let reportsList2= await fetchReportsMenu(req.user.id)
-//     }
-//     res.json(reportsList2);
-// });
 // API endpoint to get the list of reports for menu
 router.get('/reports', async (req, res) => {
     if (req.session.reportsList2) {
@@ -65,6 +55,18 @@ router.get('/reports', async (req, res) => {
             console.error('Error fetching reports list:', error);
             res.status(500).send('Error fetching reports list');
         }
+    }
+});
+
+
+
+router.get('/dashboardsetting', (req, res) => {
+    if (req.isAuthenticated()) {
+        let dashboardsetting = false
+        if (req.user.userRights == process.env.FILTERANDNAVUSERROLE1 || req.user.userRights == process.env.FILTERANDNAVUSERROLE2){
+            dashboardsetting = true
+        }
+        return res.json({ dashboardsetting });
     }
 });
 

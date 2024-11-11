@@ -133,7 +133,7 @@ router.post('/api/register', async (req, res) => {
     const { fornavn, etternavn, organisasjon, rolle, telefon, authID, authProvider, email,authProviderUsername,authProviderEmail } = req.body;
 
     try { 
-        const response = await axios.post('https://prod-24.northcentralus.logic.azure.com:443/workflows/5c0ed215db06475ca39bc55eee7ac6b8/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_Kvsr4SGY2FWeW4Oh_9HM_t77Dxkr4US2gzpE0G03A4', {
+        const response = await axios.post(process.env.AZUREGNAPI_ENDPOINT, {
             TypeOfRequest: "testregistation",
             AuthID: authID,
             AuthProvide:authProvider,

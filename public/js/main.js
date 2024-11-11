@@ -58,6 +58,27 @@ let reportInstance;
 let currentReportPageName = null;
 
 
+
+let dashboardsetting = false; // Initialize with a default value
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/dashboardsetting')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            dashboardsetting = data.dashboardsetting; // Store the value in the global variable
+        })
+        .catch(error => {
+            console.error('Error fetching dashboard setting:', error);
+        });
+});
+
+
+
 async function embedReport(reportId) {
 
     try {
@@ -80,12 +101,7 @@ async function embedReport(reportId) {
                 .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
                 .flat();  // Flatten the nested arrays into a single array 
         } 
-        // else if ((projectFilterValues && projectFilterValues.length >= 0)&&(!ouidFilterValues || ouidFilterValues.length === 0)) {
-        //     ouidFilterValues = ['empy9999999999999']
-        // } 
-        // else if ((ouidFilterValues && ouidFilterValues.length >= 0)&&(!projectFilterValues || projectFilterValues.length === 0)) {
-        //     projectFilterValues = [9999999999999]
-        // } 
+
  
         if (!ouidFilterValues || ouidFilterValues.length === 0) {
             ouidFilterValues = ['empy9999999999999']
@@ -108,8 +124,6 @@ async function embedReport(reportId) {
 
         // Format the start and end dates to the start and end of the selected months
         const currentDate = new Date();
-        // let startDate = "2022-01-01T00:00:00Z"; // Default start date
-        // let endDate = "2024-11-01T00:00:00Z"; // Default end date
         let endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 0, 0, 0);
         let endDateMinusOneMonth = new Date(endDate.getFullYear(), endDate.getMonth()-1, 1, 0, 0, 0);
         let startDate = new Date(endDateMinusOneMonth.getFullYear(), 0, 1, 0, 0, 0);
@@ -161,13 +175,7 @@ async function embedReport(reportId) {
             }
         ];
 
-            //Sjekk ut denne !
-        let filterPaneEnabledStatus = false
-        let navContentPaneEnabled = false
-        if (projectAccessUserRights == 'admin' || projectAccessUserRights == 'Green Norway Employed') {
-            filterPaneEnabledStatus = true
-            navContentPaneEnabled = true
-        }
+
         const reportConfig = {
             type: 'report',
             tokenType: window['powerbi-client'].models.TokenType.Embed,
@@ -176,8 +184,8 @@ async function embedReport(reportId) {
             id: embedInfo.reportId,
             filters: filters,
             settings: {
-                filterPaneEnabled: filterPaneEnabledStatus,
-                navContentPaneEnabled: navContentPaneEnabled,
+                filterPaneEnabled: dashboardsetting,
+                navContentPaneEnabled: dashboardsetting,
                 layoutType: 1 //3
                 // Widescreen = 0	
                 // Standard = 1	
@@ -307,30 +315,6 @@ function initializeProjectSelect() {
 }
 
 
-// // Populate the project dropdown with project names
-// function populateProjectFilterDropdown(accessDetails) {
-//     const projectDropdown = document.getElementById('projectFilterSelect');
-//     projectDropdown.innerHTML = ''; // Clear existing options
-
-//     accessDetails.forEach(project => {
-//         const option = document.createElement('option');
-//         option.value = JSON.stringify({ projectIDs: project.projectIDs, orgIDs: project.orgIDs });
-//         if(project.projectIDs != "" && project.orgIDs!= ""){
-//             option.text = project.name
-//             option.text2= 'Eaas & Klima'
-//         }else if(project.projectIDs != "" && project.orgIDs == ""){
-//             option.text = project.name + ' kun Eaas'
-//             option.text2= 'Eaas'
-//         }else if(!project.projectIDs == "" && project.orgIDs != "") {
-//             option.text = project.name + ' kun Klima'
-//             option.text2= 'Klima'
-//         }else{
-//             option.text = project.name  + ' Ukjent';
-//         }
-//         // option.text = project.name;
-//         projectDropdown.appendChild(option);
-//     });
-// }
 // Populate the project dropdown with project names grouped by category
 function populateProjectFilterDropdown(accessDetails) {
     const projectDropdown = document.getElementById('projectFilterSelect');
@@ -416,12 +400,6 @@ function getCurrentProjectFilterValue() {
 function getProjectAccessDetails() {
     return Array.isArray(projectAccessDetails) ? projectAccessDetails : [];
     }
-
-
-
-
-
-
 
 
 

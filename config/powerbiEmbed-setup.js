@@ -11,48 +11,100 @@ async function fetchPowerBIEmbedInfo(reportId) {
     const resourceUrl = 'https://analysis.windows.net/powerbi/api';
     const apiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${workspaceId}/reports/${reportId}/GenerateToken`;
 
-    // Get access token from Azure AD
-    const tokenResponse = await axios.post(
-        `${authorityUrl}/oauth2/v2.0/token`,
-        new URLSearchParams({
-            grant_type: 'client_credentials',
-            client_id: clientId,
-            client_secret: clientSecret,
-            scope: `${resourceUrl}/.default`
-        })
-    );
 
-    const accessToken = tokenResponse.data.access_token;
+    try {
+        // Get access token from Azure AD
+        const tokenResponse = await axios.post(
+            `${authorityUrl}/oauth2/v2.0/token`,
+            new URLSearchParams({
+                grant_type: 'client_credentials',
+                client_id: clientId,
+                client_secret: clientSecret,
+                scope: `${resourceUrl}/.default`
+            })
+        );
 
-    // Generate embed token for the report
-    const embedTokenResponse = await axios.post(
-        apiUrl,
-        { accessLevel: 'View' },
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`
+        const accessToken = tokenResponse.data.access_token;
+
+        // Get report details including embed URL
+        const reportResponse = await axios.get(
+            `https://api.powerbi.com/v1.0/myorg/groups/${workspaceId}/reports/${reportId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
             }
-        }
-    );
+        );
 
-    const embedToken = embedTokenResponse.data.token;
+        const embedUrl = reportResponse.data.embedUrl;
 
-    // Get report details including embed URL
-    const reportResponse = await axios.get(
-        `https://api.powerbi.com/v1.0/myorg/groups/${workspaceId}/reports/${reportId}`,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
+        // Generate embed token for the report
+        const embedTokenResponse = await axios.post(
+            apiUrl,
+            { accessLevel: 'View' },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`
+                }
             }
-        }
-    );
+        );
 
-    return {
-        embedUrl: reportResponse.data.embedUrl,
-        embedToken: embedToken,
-        reportId: reportId
-    };
+        const embedToken = embedTokenResponse.data.token;
+
+        // Return the embed information
+        return {
+            embedToken: embedToken,
+            embedUrl: embedUrl,
+            reportId: reportId
+        };
+    } catch (error) {
+        console.error('Error fetching Power BI embed info:', error);
+        throw error;
+    }
+
+    // // Get access token from Azure AD
+    // const tokenResponse = await axios.post(
+    //     `${authorityUrl}/oauth2/v2.0/token`,
+    //     new URLSearchParams({
+    //         grant_type: 'client_credentials',
+    //         client_id: clientId,
+    //         client_secret: clientSecret,
+    //         scope: `${resourceUrl}/.default`
+    //     })
+    // );
+
+    // const accessToken = tokenResponse.data.access_token;
+
+    // // Generate embed token for the report
+    // const embedTokenResponse = await axios.post(
+    //     apiUrl,
+    //     { accessLevel: 'View' },
+    //     {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: `Bearer ${accessToken}`
+    //         }
+    //     }
+    // );
+
+    // const embedToken = embedTokenResponse.data.token;
+
+    // // Get report details including embed URL
+    // const reportResponse = await axios.get(
+    //     `https://api.powerbi.com/v1.0/myorg/groups/${workspaceId}/reports/${reportId}`,
+    //     {
+    //         headers: {
+    //             Authorization: `Bearer ${accessToken}`
+    //         }
+    //     }
+    // );
+
+    // return {
+    //     embedUrl: reportResponse.data.embedUrl,
+    //     embedToken: embedToken,
+    //     reportId: reportId
+    // };
 }
 
 
