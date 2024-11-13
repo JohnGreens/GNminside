@@ -33,7 +33,7 @@ async function fetchAndPopulateReports() {
         reports.forEach(report => {
             const menuItemElement = document.createElement('li');
             menuItemElement.classList.add('sidebar__reportmenu-item');
-            menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${decodeURIComponent(report.name)}</a>`;
+            menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${report.name}</a>`;
             reportMenuElement.appendChild(menuItemElement);
         });
     } catch (error) {
@@ -77,6 +77,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
+async function highlightSelectedReport(reportId) {
+    // Wait for the report menu items to be rendered
+    await new Promise(resolve => {
+        const checkExist = setInterval(() => {
+            if (document.querySelectorAll('.sidebar__reportmenu-item').length > 0) {
+                clearInterval(checkExist);
+                resolve();
+            }
+        }, 100); // Check every 100ms
+    });
+
+    // Remove the 'selected' class from all report menu items
+    document.querySelectorAll('.sidebar__reportmenu-item').forEach(item => {
+        item.classList.remove('selected');
+    });
+
+    // Add the 'selected' class to the currently selected report menu item
+    const selectedItem = document.querySelector(`.sidebar__reportmenu-item a[onclick*="${reportId}"]`);
+    if (selectedItem) {
+        selectedItem.parentElement.classList.add('selected');
+    } else {
+        console.warn(`No report menu item found for reportId: ${reportId}`);
+    }
+}
+
 
 
 async function embedReport(reportId) {
@@ -101,8 +126,7 @@ async function embedReport(reportId) {
                 .filter(orgIDs => orgIDs && orgIDs.length > 0)  // Filter out undefined or empty orgIDs
                 .flat();  // Flatten the nested arrays into a single array 
         } 
-
- 
+        
         if (!ouidFilterValues || ouidFilterValues.length === 0) {
             ouidFilterValues = ['empy9999999999999']
         }
@@ -196,6 +220,8 @@ async function embedReport(reportId) {
             }
         };
 
+        // Highlight the selected report menu item
+        await highlightSelectedReport(reportId);
 
         // Embed the report
         reportInstance = powerBIService.embed(reportContainerElement, reportConfig);

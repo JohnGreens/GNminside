@@ -136,7 +136,7 @@ body {
     color: #074223;
     display: block;
     padding: 8px 12px;
-    border-radius: 15px;
+    border-radius: 20px;
     transition: all 0.3s;
     display: flex;
     align-items: center;
@@ -156,6 +156,24 @@ body {
     color: #333 !important;
     opacity: 1; /* Firefox */
   }
+
+
+
+
+
+
+
+/* Highlighted state for selected report */
+.sidebar__reportmenu-item.selected a {
+    background-color: #074223; /* Dark green background #074223 #0D8346 */
+    color: white; /* White text */
+}
+
+
+
+
+
+
 
 
 /* Sidebar project filter */
