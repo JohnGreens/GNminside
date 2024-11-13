@@ -26,7 +26,7 @@ async function fetchAndPopulateReports() {
     try {
         const response = await fetch('/reports');
         const reports = await response.json();
-
+        
         const reportMenuElement = document.getElementById('reportMenu');
         reportMenuElement.innerHTML = ''; // Clear previous items
 
@@ -36,6 +36,7 @@ async function fetchAndPopulateReports() {
             menuItemElement.innerHTML = `<a href="#" onclick="saveLastReportId('${report.id}'); embedReport('${report.id}', $('#projectFilterSelect').val())"><i class="${report.icon}"></i>${report.name}</a>`;
             reportMenuElement.appendChild(menuItemElement);
         });
+        return reports;
     } catch (error) {
         console.error('Error fetching reports:', error);
     }
@@ -432,30 +433,58 @@ function getProjectAccessDetails() {
 
 
 
+// // Initialize the application on window load
+// window.onload = function() {
+//     fetch('/config')
+//         .then(response => response.json())
+//         .then(config => {
+//             const REPORT_1_ID = config.report1Id;
+
+//             // Fetch and populate the reports
+//             // const REPORT_1_IDs =  fetchAndPopulateReports()
+//             // console.log('fetchAndPopulateReports',REPORT_1_IDs);
+//             fetchAndPopulateReports()
+
+//             const lastReportId = localStorage.getItem('lastReportId') || REPORT_1_ID;
+//             embedReport(lastReportId);
+
+//             const accessDetails = getProjectAccessDetails(); 
+//             populateProjectFilterDropdown(accessDetails);
+//             initializeProjectSelect();
+
+//             $('#projectFilterSelect').on('change', applyProjectFilter);
+//         })
+//         .catch(error => {
+//             console.error('Error fetching REPORT_1_ID from server:', error);
+//         });
+
+// }
+
+
+
+
 // Initialize the application on window load
-window.onload = function() {
-    fetch('/config')
-        .then(response => response.json())
-        .then(config => {
-            const REPORT_1_ID = config.report1Id;
+window.onload = async function() {
+    try {
+        const REPORTS =  await fetchAndPopulateReports()
 
-            // Fetch and populate the reports
-            fetchAndPopulateReports();
+        const lastReportId = localStorage.getItem('lastReportId') || REPORTS[0].id
+        embedReport(lastReportId);
 
-            const lastReportId = localStorage.getItem('lastReportId') || REPORT_1_ID;
-            embedReport(lastReportId);
+        const accessDetails = getProjectAccessDetails(); 
+        populateProjectFilterDropdown(accessDetails);
+        initializeProjectSelect();
 
-            const accessDetails = getProjectAccessDetails(); 
-            populateProjectFilterDropdown(accessDetails);
-            initializeProjectSelect();
-
-            $('#projectFilterSelect').on('change', applyProjectFilter);
-        })
-        .catch(error => {
-            console.error('Error fetching REPORT_1_ID from server:', error);
-        });
-
+        $('#projectFilterSelect').on('change', applyProjectFilter);
+    }
+    catch(error){
+        console.error('Error fetching REPORT_1_ID from server:', error);
+    };
 }
+
+
+
+
 
 
 

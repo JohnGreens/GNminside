@@ -34,10 +34,10 @@ router.get('/', (req, res) => {
 
 
 
-// Endpoint to serve the REPORT_1_ID to the client
-router.get('/config', (req, res) => {
-    res.json({ report1Id: process.env.DEFAULTREPPORTID });
-});
+// // Endpoint to serve the REPORT_1_ID to the client
+// router.get('/config', (req, res) => {
+//     res.json({ report1Id: process.env.DEFAULTREPPORTID });
+// });
 
 
 // API endpoint to get the list of reports for menu
