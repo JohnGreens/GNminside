@@ -5,6 +5,10 @@
   "scripts": {
     "start": "node app.js"
   },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10.9.2"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -13,7 +17,7 @@
     "@azure/msal-node": "^2.14.0",
     "axios": "^1.7.7",
     "cookie-parser": "^1.4.7",
-    "csurf": "^1.11.0",
+    "csurf": "^1.2.2",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-handlebars": "^8.0.1",
@@ -27,5 +31,12 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-linkedin-oauth2": "github:auth0/passport-linkedin-oauth2#v3.0.0",
     "powerbi-client": "^2.23.1"
+  },
+  "overrides": {
+    "glob": "^11.0.0",
+    "jackspeak": "^4.0.2",
+    "lru-cache": "^11.0.1",
+    "minimatch": "^10.0.1",
+    "path-scurry": "^2.0.0"
   }
 }
